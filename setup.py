@@ -1,19 +1,8 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 import os
-import sys
 
 from setuptools import setup, find_packages
-from setuptools.command.test import test
-
-
-class PyTest(test):
-    def run_tests(self):
-        import pytest
-
-        errno = pytest.main(['s4'])
-        sys.exit(errno)
-
 
 setup_dir = os.path.abspath(os.path.dirname(__file__))
 
@@ -36,7 +25,6 @@ setup(
     long_description_content_type='text/x-rst',
     packages=find_packages(exclude=['*.test', '*.test.*', 'test.*', 'test']),
     python_requires='>=2.7',
-    cmdclass={'test': PyTest},
     classifiers=[
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
