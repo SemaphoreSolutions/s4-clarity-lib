@@ -1,6 +1,7 @@
 from s4.clarity.scripts import TriggeredStepEPP
 
 LibraryVolume = 2.0
+MolWeightBasePair = 660 * 1e6  # micrograms / mol
 AssumedBasePairs = 400.0
 TargetMolarity = 4.0
 Overage = 4
@@ -12,7 +13,7 @@ class Normalization (TriggeredStepEPP):
 
         for iomap in self.step.details.iomaps:
             library_concentration = iomap.input["Concentration"]
-            library_molarity = library_concentration / (660 * AssumedBasePairs) * 1e6
+            library_molarity = library_concentration / (AssumedBasePairs * MolWeightBasePair)
             iomap.output["Concentration"] = library_concentration
             iomap.output["Molarity (nM)"] = library_molarity
             iomap.output["Library Vol (uL)"] = LibraryVolume
