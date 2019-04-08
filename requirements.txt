@@ -1,0 +1,11 @@
+# Base requirements
+requests
+argparse
+python-dateutil
+six
+future
+typing
+
+# Test requirements
+mock
+pytest

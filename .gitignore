@@ -1,0 +1,23 @@
+# Compiled python modules.
+*.pyc
+
+# Setuptools distribution and build folders.
+/dist
+/build
+/*.egg-info
+/.eggs
+
+# PyCharm
+/.idea
+
+# OSX junk
+.DS_Store
+
+# virtualenv
+/venv*
+*.iml
+
+*.class
+.cache/
+
+docs/_build
