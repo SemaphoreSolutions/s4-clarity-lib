@@ -29,7 +29,7 @@ setup(
     name='s4-clarity',
     version=version['__version__'],
     author='Semaphore Solutions',
-    url='http://www.semaphoresolutions.ca',  # TODO switch to github url
+    url='https://github.com/SemaphoreSolutions/s4-clarity-lib',
     author_email='info@semaphoresolutions.ca',
     description='A general purpose library for interacting with Clarity LIMS',
     long_description=long_description,
