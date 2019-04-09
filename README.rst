@@ -54,6 +54,3 @@ To install s4-clarity, simply use pip::
 
     $ pip install s4-clarity
 
-Documentation
--------------
-To build the documentation, run ``make html`` from the docs directory.
