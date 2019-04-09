@@ -41,7 +41,6 @@ The S4-Clarity library lets developers interact with the Clarity API in fewer li
                 iomap.output["Tris HCl (uL)"] = LibraryVolume * (library_molarity / TargetMolarity - 1)
 
             self.lims.artifacts.batch_update(self.step.details.outputs)
-            self.step.details.commit()
 
 
     if __name__ == "__main__":
