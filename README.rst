@@ -47,6 +47,13 @@ The S4-Clarity library lets developers interact with the Clarity API in fewer li
     if __name__ == "__main__":
         Normalization.main()
 
+Installation
+------------
+
+To install s4-clarity, simply use pip::
+
+    $ pip install s4-clarity
+
 Documentation
 -------------
 To build the documentation, run ``make html`` from the docs directory.
