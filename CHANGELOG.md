@@ -1,6 +1,6 @@
 Release History
 ===============
-Unreleased changes for open sourcing
+1.0.0
 -
 - s4.scripting -> s4.clarity.scripts
 - s4.steputils -> s4.clarity.steputils
