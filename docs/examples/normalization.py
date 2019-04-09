@@ -20,7 +20,6 @@ class Normalization (TriggeredStepEPP):
             iomap.output["Tris HCl (uL)"] = LibraryVolume * (library_molarity / TargetMolarity - 1)
 
         self.lims.artifacts.batch_update(self.step.details.outputs)
-        self.step.details.commit()
 
 
 if __name__ == "__main__":
