@@ -8,6 +8,9 @@ python:
     - '3.6'
     - '3.7'
 
+env:
+    - COVERALLS_PARALLEL=true
+
 install:
     - pip install -r requirements.txt
 
@@ -26,3 +29,6 @@ deploy:
         secure: mbGQtNQAdtpfR3tcF0jObnU0XlWuxrt3DJ3zaRwJa6VrWj6xaVGVX+l4KzRoKmIjsbMuvVNyt1+1ZdPf/SlXLaSwvA/gwyo2vaI3w5WhTAwXjnfaBjs3AfiWAdJFDz2r8pKW2aP1uIP22wFC5hh+JAvudLr9z/3S7v2Y9oK7K0fIeXNC29q9MctqEqLgn6+drz1wcGFtu+GReJlwz+q9veAqUkDHlDDIYeRXhfxq+wUF3JdFxveHgt1FqZvJK9NvcQ/IlEXD13fjuXYEgtlzJtrSOSYrSyIquczmr59/IltDvqzvmtMdqYhKhuJ9sqvzmqUWHBpVA5wABY+H9wF5Z3jk7PLyJ3PdwAH3cTsfjVaxdJZydoFuUEhPXwhZMd9E3V47g/OKRezoMvdP89Gb038zt4sGgv6m8U0oxgA3VzKaWwrLn+mhR8ltUzWiRQyqWHMhluDWF+EYsUhfaItlc0QdkSnQSRi5eVXOBoq9+mm4qC8xz1dxK6CP8pbKXy/Np9Y+fdR8/0c7CrNL4CpX2jPhjxnBexQViteLaXyN9cQA9xPk0RjWUtmnDflV4UJMMcsyWPaF9jzrTDGS8uUhEI7qSWjnNnfQb3+CThu/L4SDw/fsEov4tvcOzBwYPL5bbidZMs4BRo9HLtxba1Jt7pA5OvH+f4eT/vk+OP7cvMc=
     on:
         tags: true
+
+notifications:
+  webhooks: https://coveralls.io/webhook
