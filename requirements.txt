@@ -9,3 +9,7 @@ typing
 # Test requirements
 mock
 pytest
+
+# Coverage
+pytest-cov
+coveralls

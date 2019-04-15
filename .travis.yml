@@ -12,7 +12,10 @@ install:
     - pip install -r requirements.txt
 
 script:
-    - pytest
+    - pytest --cov=s4
+
+after_success:
+    - coveralls
 
 deploy:
     provider: pypi
