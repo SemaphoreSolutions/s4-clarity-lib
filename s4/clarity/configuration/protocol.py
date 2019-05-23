@@ -2,6 +2,7 @@
 # ---------------------------------------------------------------------------
 
 from s4.clarity._internal.element import ClarityElement, WrappedXml
+from s4.clarity.configuration.udf import Field
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
 from s4.clarity._internal.props import subnode_property_list_of_dicts, subnode_property, subnode_property_literal_dict, attribute_property, subnode_element_list
@@ -9,6 +10,12 @@ from s4.clarity import types, lazy_property
 
 
 class Protocol(ClarityElement):
+    """
+    Represents a protocol object in Clarity.
+
+    https://www.genologics.com/files/permanent/API/latest/data_protcnf.html#protocol
+    """
+
     UNIVERSAL_TAG = "{http://genologics.com/ri/protocolconfiguration}protocol"
 
     properties = subnode_property_literal_dict('protocol-properties', 'protocol-property')
@@ -53,13 +60,13 @@ class Protocol(ClarityElement):
         return len(self.steps)
 
 
-class ProtocolStepField(WrappedXml):
-    name = attribute_property("name")
-    style = attribute_property("style")
-    attach_to = attribute_property("attach-to")
-
-
 class StepConfiguration(ClarityElement):
+    """
+    Represents a step in Clarity
+
+    https://www.genologics.com/files/permanent/API/latest/data_protstepcnf.html#step
+    """
+
     UNIVERSAL_TAG = "{http://genologics.com/ri/protocolconfiguration}step"
 
     def __init__(self, protocol, node):
@@ -71,9 +78,9 @@ class StepConfiguration(ClarityElement):
 
     properties = subnode_property_literal_dict('step-properties', 'step-property')
     protocol_step_index = subnode_property("protocol-step-index", types.NUMERIC)
-    queue_fields = subnode_element_list(ProtocolStepField, "queue-fields", "queue-field")
-    step_fields = subnode_element_list(ProtocolStepField, "step-fields", "step-field")
-    sample_fields = subnode_element_list(ProtocolStepField, "sample-fields", "sample-field")
+    queue_fields = subnode_element_list(Field, "queue-fields", "queue-field")
+    step_fields = subnode_element_list(Field, "step-fields", "step-field")
+    sample_fields = subnode_element_list(Field, "sample-fields", "sample-field")
     triggers = subnode_property_list_of_dicts('epp-triggers/epp-trigger', as_attributes=[
         'status', 'point', 'type', 'name'
     ])

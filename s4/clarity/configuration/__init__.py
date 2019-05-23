@@ -1,10 +1,11 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 
-from .protocol import Protocol, StepConfiguration, ProtocolStepField
+from .protocol import Protocol, StepConfiguration
 from .workflow import Workflow
-from .process_type import ProcessType, ProcessTemplate, Automation
-from .udf import Udf
+from .process_type import ProcessType, ProcessTemplate, Automation, ProcessInput, ProcessOutput, Parameter, \
+    QueueField, IceBucketField, ProcessTypeAttribute, ProcessStepProperty, ProcessEppTrigger, ProcessPermittedInstrumentType
+from .udf import Udf, Field
 from .stage import Stage
 
 module_members = [
@@ -12,11 +13,20 @@ module_members = [
     ProcessTemplate,
     ProcessType,
     Protocol,
-    ProtocolStepField,
     Stage,
     StepConfiguration,
     Udf,
+    Field,
     Workflow,
+    ProcessInput,
+    ProcessOutput,
+    Parameter,
+    QueueField,
+    IceBucketField,
+    ProcessTypeAttribute,
+    ProcessStepProperty,
+    ProcessEppTrigger,
+    ProcessPermittedInstrumentType,
 ]
 
 __all__ = [m.__name__ for m in module_members]

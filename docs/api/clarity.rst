@@ -123,13 +123,13 @@ Permission
     :show-inheritance:
 
 Placement
-------------
+---------
 
 .. autoclass:: s4.clarity.step.Placement
     :members:
 
 Pool
-------------
+----
 
 .. autoclass:: s4.clarity.step.Pool
     :members:
@@ -168,6 +168,68 @@ Process Type
     :members:
     :show-inheritance:
 
+
+Process Input
+-------------
+
+.. autoclass:: s4.clarity.configuration.ProcessInput
+    :members:
+    :show-inheritance:
+
+Process Output
+--------------
+.. autoclass:: s4.clarity.configuration.ProcessOutput
+    :members:
+    :show-inheritance:
+
+Parameter
+---------
+.. autoclass:: s4.clarity.configuration.Parameter
+    :members:
+    :show-inheritance:
+
+Queue Field
+-----------
+.. autoclass:: s4.clarity.configuration.QueueField
+    :members:
+    :show-inheritance:
+
+Ice Bucket Field
+----------------
+.. autoclass:: s4.clarity.configuration.IceBucketField
+    :members:
+    :show-inheritance:
+
+Process Type Attribute
+----------------------
+.. autoclass:: s4.clarity.configuration.ProcessTypeAttribute
+    :members:
+    :show-inheritance:
+
+Process Step Property
+---------------------
+
+.. autoclass:: s4.clarity.configuration.ProcessStepProperty
+    :members:
+    :show-inheritance:
+
+Process Epp Trigger
+-------------------
+.. autoclass:: s4.clarity.configuration.ProcessEppTrigger
+    :members:
+    :show-inheritance:
+
+Process Permitted Instrument Type
+---------------------------------
+.. autoclass:: s4.clarity.configuration.ProcessPermittedInstrumentType
+    :members:
+    :show-inheritance:
+
+
+
+
+
+
 Project
 -------
 
@@ -181,12 +243,6 @@ Protocol
 .. autoclass:: s4.clarity.configuration.Protocol
     :members:
     :show-inheritance:
-
-Protocol Step Field
--------------------
-
-.. autoclass:: s4.clarity.configuration.ProtocolStepField
-    :members:
 
 Queue
 -----
@@ -306,7 +362,7 @@ Step Placements
     :show-inheritance:
 
 Step Pools
-------------
+----------
 
 .. autoclass:: s4.clarity.step.StepPools
     :members:

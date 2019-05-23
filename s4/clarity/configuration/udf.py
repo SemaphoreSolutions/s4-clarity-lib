@@ -1,7 +1,7 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 from s4.clarity import ETree
-from s4.clarity._internal import ClarityElement
+from s4.clarity._internal import ClarityElement, WrappedXml
 from s4.clarity._internal.props import subnode_property, attribute_property
 from s4.clarity import types
 
@@ -102,3 +102,16 @@ class Udf(ClarityElement):
         preset_node = ETree.SubElement(self.xml_root, 'preset')
         preset_node.text = types.obj_to_clarity_string(preset_value)
 
+
+class Field(WrappedXml):
+    """
+    Represents a UDF Field definition in the Clarity configuration.
+
+    https://www.genologics.com/files/permanent/API/latest/data_cnf.html#field
+    """
+
+    UNIVERSAL_TAG = "{http://genologics.com/ri/configuration}field"
+
+    name = attribute_property('name')
+    attach_to = attribute_property('attach-to')
+    style = attribute_property('style')
