@@ -31,6 +31,7 @@ class ProcessOutput(WrappedXml):
     artifact_type = subnode_property('artifact-type')
     display_name = subnode_property('display-name')
     output_generation_type = subnode_property('output-generation-type')
+    variability_type = subnode_property('variability-type')
     number_of_outputs = subnode_property('number-of-outputs', typename=types.NUMERIC)
     output_name = subnode_property('output-name')
     assign_working_flag = subnode_property('assign-working-flag', typename=types.BOOLEAN)
@@ -160,7 +161,7 @@ class ProcessTemplate(FieldsMixin, WrappedXml):
     """
     Represents a process-template in Clarity.
 
-    https://www.genologics.com/files/permanent/API/latest/data_ptm.html#element_process-template
+    https://www.genologics.com/files/permanent/API/latest/data_ptm.html#process-template
     """
 
     UNIVERSAL_TAG = "{http://genologics.com/ri/processtemplate}process-template"
@@ -174,7 +175,7 @@ class Automation(ClarityElement):
     """
     Represents an automation in Clarity.
 
-    https://www.genologics.com/files/permanent/API/latest/data_aut.html#element_automation
+    https://www.genologics.com/files/permanent/API/latest/data_aut.html#automation
     """
 
     UNIVERSAL_TAG = "{http://genologics.com/ri/automation}automation"

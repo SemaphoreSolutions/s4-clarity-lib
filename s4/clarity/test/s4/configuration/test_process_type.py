@@ -36,6 +36,7 @@ class TestProcessType(LimsTestCase):
         self.assertEqual(first_output.artifact_type, 'Analyte')
         self.assertEqual(first_output.display_name, 'Analyte')
         self.assertEqual(first_output.output_generation_type, 'PerInput')
+        self.assertEqual(first_output.variability_type, 'Fixed')
         self.assertEqual(first_output.number_of_outputs, 1)
         self.assertEqual(first_output.output_name, '{InputItemName}')
         self.assertEqual(first_output.assign_working_flag, False)
