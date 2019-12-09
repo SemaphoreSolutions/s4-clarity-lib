@@ -22,11 +22,6 @@ log = logging.getLogger(__name__)
 
 class LIMS(object):
     """
-    :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
-    :param str username: Clarity User Name
-    :param str password: Clarity Password
-    :param bool dry_run: If True, do not actually make calls to Clarity
-    :param bool insecure: Disables SSL validation
 
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
     :ivar ElementFactory samples: Factory for :class:`s4.clarity.sample.Sample`
@@ -47,15 +42,37 @@ class LIMS(object):
     _HOST_RE = re.compile(r'https?://([^/:]+)')
 
     def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False):
-        if root_uri.endswith("/"):
-            self.root_uri = root_uri[:-1]  # strip off /
-        else:
-            self.root_uri = root_uri
+        """
+        Constructs a new LIMS object. This will provide an interface to the Clarity LIMS server, found
+        at the Root URI. The user name and password provided will be used to authenticate with Clarity and
+        all actions taken by the script will be done as that user.
 
+        If a Dry Run is selected then no data will be sent back to Clarity.
+
+        If Insecure is selected then the SSL Certificate used does not need to be signed by a signing authority.
+        This is useful in the case where you are operating against a development server using a self signed cert.
+
+        Log Requests will create log entries for each HTTP request made.
+
+        :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
+        :param str username: Clarity User Name
+        :param str password: Clarity Password
+        :param bool dry_run: If True, do not actually make calls to Clarity
+        :param bool insecure: Disables SSL validation
+        :param log_requests: Log extra information about HTTP requests
+        """
+
+        # strip off the trailing `/` from the URI if one was included
+        self.root_uri = root_uri.rstrip("/")
+
+        # Verify that our root uri looks like a properly formed URI
         hostname_match = self._HOST_RE.match(self.root_uri)
         if not hostname_match:
             raise Exception("No hostname found in LIMS uri: %s" % self.root_uri)
+
+        # Using the same RegEx query select out the hostname from the URI
         self.hostname = hostname_match.group(1)
+
         self._opened_ssh_tunnel = False
         self._insecure = insecure
         self.log_requests = log_requests
