@@ -47,7 +47,6 @@ class ElementFactory(object):
         """
         :type lims: LIMS
         :type element_class: classobj
-        :type batch_flags: BatchFlags or None
         :type request_path: str
         :param request_path: for example, '/configuration/workflows'.
                              when not specified, uses '/<plural of element name>'.
@@ -69,8 +68,28 @@ class ElementFactory(object):
 
         lims.factories[element_class] = self
 
+    def _get_endpoint_uri(self):
+        # type: () -> str
+        """
+        Returns the Clarity endpoint URI the factory will manage.
+        :return: The fully qualified endpoint URI for this data type.
+        """
+
+        # If the class has the REQUEST_PATH attribute then it will
+        # be used to override the default path.
+        if hasattr(self.element_class, 'REQUEST_PATH'):
+            request_path = self.element_class.REQUEST_PATH
+        else:
+            # The default is the plural name, ex:
+            # /api/v2/steps
+            request_path = "/" + self._plural_name
+
+        # Generate our uri with the request path
+        # in relation to the root uri
+        return self.lims.root_uri + request_path
+
     def _get_batch_flag(self):
-        # type: () -> BatchFlags
+        # type: () -> int
         """
         Reads the batch flag attribute from the element class.
         This will be defined on the BATCH_FLAGS class property.
@@ -78,9 +97,9 @@ class ElementFactory(object):
         :return: The class's batch flags.
         """
 
-        if has_attribute(self.element_class, 'BATCH_FLAGS'):
+        if hasattr(self.element_class, 'BATCH_FLAGS'):
             return self.element_class.BATCH_FLAGS
-        return BatchFlags.None
+        return BatchFlags.NONE
 
     def new(self, **kwargs):
         # type: (**str) -> ClarityElement
