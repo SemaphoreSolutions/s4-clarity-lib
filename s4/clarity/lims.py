@@ -11,7 +11,6 @@ import urllib3
 # Ensure Python 2 and 3 compatibility
 from six import BytesIO, b
 
-from s4.clarity._internal.factory import BatchFlags
 from s4.clarity._internal.stepfactory import StepFactory, ElementFactory
 from s4.clarity._internal.udffactory import UdfFactory
 from s4.clarity._internal.lazy_property import lazy_property
@@ -91,12 +90,13 @@ class LIMS(object):
         from .configuration.stage import Stage
         from .lab import Lab
 
+        # Initialise the list of factories. The element factories will
+        # add themselves to this dictionary when they are created
         self.factories = {}
 
-        # there's no need to make these lazy, we are probably using at least a couple of them
         self.steps = StepFactory(self, Step)
 
-        self.processes = ElementFactory(self, Process, request_path='/processes')
+        self.processes = ElementFactory(self, Process)
 
         self.samples = ElementFactory(self, Sample)
 
@@ -131,13 +131,17 @@ class LIMS(object):
         # configuration
         from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation
 
-        self.workflows = ElementFactory(self, Workflow, request_path='/configuration/workflows')
+        self.workflows = ElementFactory(self, Workflow)
 
-        self.protocols = ElementFactory(self, Protocol, request_path='/configuration/protocols')
-        self.udfs = UdfFactory(self, Udf, request_path='/configuration/udfs')
-        self.process_types = ElementFactory(self, ProcessType, name_attribute="displayname")
-        self.process_templates = ElementFactory(self, ProcessTemplate, name_attribute="name")
-        self.automations = ElementFactory(self, Automation, name_attribute="name", request_path="/configuration/automations")
+        self.protocols = ElementFactory(self, Protocol)
+
+        self.udfs = UdfFactory(self, Udf)
+
+        self.process_types = ElementFactory(self, ProcessType)
+
+        self.process_templates = ElementFactory(self, ProcessTemplate)
+
+        self.automations = ElementFactory(self, Automation)
 
         self.stages = ElementFactory(self, Stage)
 

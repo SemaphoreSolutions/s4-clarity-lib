@@ -2,6 +2,7 @@
 # ---------------------------------------------------------------------------
 
 from s4.clarity._internal.element import ClarityElement, WrappedXml
+from s4.clarity._internal.factory import BatchFlags
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
 from s4.clarity._internal.props import subnode_property_list_of_dicts, subnode_property, subnode_property_literal_dict, attribute_property, subnode_element_list
@@ -11,6 +12,7 @@ from s4.clarity import types, lazy_property
 class Protocol(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/protocolconfiguration}protocol"
     BATCH_FLAGS = BatchFlags.QUERY
+    REQUEST_PATH = '/configuration/protocols'
 
     properties = subnode_property_literal_dict('protocol-properties', 'protocol-property')
     index = attribute_property("index", typename=types.NUMERIC)

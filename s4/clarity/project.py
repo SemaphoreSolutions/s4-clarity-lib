@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.factory import BatchFlags
 from ._internal import ClarityElement, FieldsMixin
 from s4.clarity._internal.props import subnode_property, subnode_link
 from s4.clarity.researcher import Researcher

@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.factory import BatchFlags
 from ._internal import ClarityElement
 
 from six import BytesIO, StringIO, string_types

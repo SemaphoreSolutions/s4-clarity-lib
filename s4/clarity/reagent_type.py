@@ -2,6 +2,8 @@
 # ---------------------------------------------------------------------------
 
 from future.utils import python_2_unicode_compatible
+
+from s4.clarity._internal.factory import BatchFlags
 from ._internal import ClarityElement
 from ._internal.props import subnode_property, subnode_property_literal_dict
 from s4.clarity import ETree

@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.factory import BatchFlags
 from ._internal import WrappedXml, FieldsMixin, ClarityElement
 from ._internal.props import subnode_property, subnode_element_list, attribute_property, subnode_link
 from s4.clarity.file import File

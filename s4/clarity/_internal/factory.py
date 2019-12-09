@@ -43,7 +43,7 @@ class ElementFactory(object):
     def _strip_params(string):
         return ElementFactory._params_re.sub('', string)
 
-    def __init__(self, lims, element_class, request_path=None, name_attribute="name"):
+    def __init__(self, lims, element_class):
         """
         :type lims: LIMS
         :type element_class: classobj
@@ -56,17 +56,19 @@ class ElementFactory(object):
 
         self.lims = lims
         self.element_class = element_class
-        self.name_attribute = name_attribute
+        self.name_attribute = self._get_name_attribute()
         self.batch_flags = self._get_batch_flag()
         self._plural_name = self.element_class.__name__.lower() + "s"
-
-        if request_path is None:
-            request_path = "/" + self._plural_name
-        self.uri = lims.root_uri + request_path
+        self.uri = self._get_endpoint_uri()
 
         self._cache = dict()
 
         lims.factories[element_class] = self
+
+    def _get_name_attribute(self):
+        if hasattr(self.element_class, 'NAME_ATTRIBUTE'):
+            return self.element_class.NAME_ATTRIBUTE
+        return "name"
 
     def _get_endpoint_uri(self):
         # type: () -> str

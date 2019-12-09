@@ -2,6 +2,7 @@
 # ---------------------------------------------------------------------------
 from s4.clarity import ETree
 from s4.clarity._internal import ClarityElement
+from s4.clarity._internal.factory import BatchFlags
 from s4.clarity._internal.props import subnode_property, attribute_property
 from s4.clarity import types
 
@@ -10,6 +11,7 @@ class Udf(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/configuration}udfconfig"
     CREATION_TAG = "{http://genologics.com/ri/configuration}field"
     BATCH_FLAGS = BatchFlags.QUERY
+    REQUEST_PATH = '/configuration/udfs'
 
     # Alternate name to avoid collision with built-in 'type'
     field_type = attribute_property("type") # type: str
