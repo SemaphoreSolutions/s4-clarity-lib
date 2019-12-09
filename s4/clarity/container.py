@@ -43,6 +43,7 @@ class ContainerDimension(WrappedXml):
 
 class ContainerType(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/containertype}container-type"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     is_tube = subnode_property("is-tube", types.BOOLEAN)  # type: bool
     x_dimension = subnode_element(ContainerDimension, "x-dimension")  # type: ContainerDimension
@@ -142,6 +143,7 @@ class ContainerType(ClarityElement):
 
 class Container(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/container}container"
+    BATCH_FLAGS = BatchFlags.BATCH_ALL
     ATTACH_TO_NAME = "Container"
 
     container_type = subnode_link(ContainerType, "type", attributes=('name', 'uri'))

@@ -18,6 +18,7 @@ class Process(IOMapsMixin, FieldsMixin, ClarityElement):
     :ivar LIMS lims:
     """
     UNIVERSAL_TAG = "{http://genologics.com/ri/process}process"
+    BATCH_FLAGS = BatchFlags.QUERY
     ATTACH_TO_CATEGORY = "ProcessType"
     IOMAPS_XPATH = "input-output-map"
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "output-type"

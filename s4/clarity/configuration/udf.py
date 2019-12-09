@@ -9,6 +9,7 @@ from s4.clarity import types
 class Udf(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/configuration}udfconfig"
     CREATION_TAG = "{http://genologics.com/ri/configuration}field"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     # Alternate name to avoid collision with built-in 'type'
     field_type = attribute_property("type") # type: str

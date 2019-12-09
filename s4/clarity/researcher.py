@@ -10,6 +10,7 @@ from s4.clarity.lab import Lab
 
 class Researcher(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/researcher}researcher"
+    BATCH_FLAGS = BatchFlags.QUERY
     ATTACH_TO_NAME = "ClientResearcher"
 
     first_name = subnode_property("first-name")

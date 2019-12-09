@@ -8,6 +8,7 @@ from s4.clarity.routing import Router
 
 class Workflow(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/workflowconfiguration}workflow"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     PENDING_STATUS = "PENDING"
     ACTIVE_STATUS = "ACTIVE"

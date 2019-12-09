@@ -15,6 +15,7 @@ log = logging.getLogger(__name__)
 
 class Sample(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/sample}sample"
+    BATCH_FLAGS = BatchFlags.BATCH_ALL
     # special tag used for creation posts
     CREATION_TAG = "{http://genologics.com/ri/sample}samplecreation"
     ATTACH_TO_NAME = "Sample"

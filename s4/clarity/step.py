@@ -36,6 +36,7 @@ PROGRAM_STATUS_QUEUED = "QUEUED"
 
 class Step(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}step"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     date_started = subnode_property("date-started", types.DATETIME)
     date_completed = subnode_property("date-completed", types.DATETIME)

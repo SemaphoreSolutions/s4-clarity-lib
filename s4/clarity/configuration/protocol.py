@@ -10,6 +10,7 @@ from s4.clarity import types, lazy_property
 
 class Protocol(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/protocolconfiguration}protocol"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     properties = subnode_property_literal_dict('protocol-properties', 'protocol-property')
     index = attribute_property("index", typename=types.NUMERIC)

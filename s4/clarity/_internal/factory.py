@@ -43,7 +43,7 @@ class ElementFactory(object):
     def _strip_params(string):
         return ElementFactory._params_re.sub('', string)
 
-    def __init__(self, lims, element_class, batch_flags=None, request_path=None, name_attribute="name"):
+    def __init__(self, lims, element_class, request_path=None, name_attribute="name"):
         """
         :type lims: LIMS
         :type element_class: classobj
@@ -58,7 +58,7 @@ class ElementFactory(object):
         self.lims = lims
         self.element_class = element_class
         self.name_attribute = name_attribute
-        self.batch_flags = batch_flags or BatchFlags.NONE
+        self.batch_flags = self._get_batch_flag()
         self._plural_name = self.element_class.__name__.lower() + "s"
 
         if request_path is None:
@@ -68,6 +68,19 @@ class ElementFactory(object):
         self._cache = dict()
 
         lims.factories[element_class] = self
+
+    def _get_batch_flag(self):
+        # type: () -> BatchFlags
+        """
+        Reads the batch flag attribute from the element class.
+        This will be defined on the BATCH_FLAGS class property.
+        If this is not defined it is assumed there is no batching.
+        :return: The class's batch flags.
+        """
+
+        if has_attribute(self.element_class, 'BATCH_FLAGS'):
+            return self.element_class.BATCH_FLAGS
+        return BatchFlags.None
 
     def new(self, **kwargs):
         # type: (**str) -> ClarityElement
@@ -146,7 +159,7 @@ class ElementFactory(object):
         return self.batch_flags & BatchFlags.QUERY
 
     def from_link_node(self, xml_node):
-        # type: (ETree.Element) -> ClarityElement
+        # type: (ETree.Element) -> ClarityElement or None
         """
         Will return the ClarityElement described by the link node.
 

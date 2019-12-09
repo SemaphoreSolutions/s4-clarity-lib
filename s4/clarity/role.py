@@ -9,6 +9,7 @@ from s4.clarity import lazy_property
 
 class Role(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/role}role"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     # Not using subnode_links for this property, as it requires a Researcher import that creates a circular dependency
     @lazy_property

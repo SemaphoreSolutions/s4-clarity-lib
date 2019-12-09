@@ -9,6 +9,7 @@ from s4.clarity import ETree
 
 class ReagentType(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagenttype}reagent-type"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     @python_2_unicode_compatible
     def __str__(self):

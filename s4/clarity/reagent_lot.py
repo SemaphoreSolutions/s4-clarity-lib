@@ -9,6 +9,7 @@ from s4.clarity import types
 
 class ReagentLot(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagentlot}reagent-lot"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     reagent_kit = subnode_link(ReagentKit, "reagent-kit", attributes=('uri',))
 

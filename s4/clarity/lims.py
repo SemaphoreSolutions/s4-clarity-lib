@@ -94,55 +94,50 @@ class LIMS(object):
         self.factories = {}
 
         # there's no need to make these lazy, we are probably using at least a couple of them
-        self.steps = StepFactory(self, Step, batch_flags=BatchFlags.QUERY)
+        self.steps = StepFactory(self, Step)
 
-        self.processes = ElementFactory(self, Process, batch_flags=BatchFlags.QUERY, request_path='/processes')
+        self.processes = ElementFactory(self, Process, request_path='/processes')
 
-        self.samples = ElementFactory(self, Sample, batch_flags=BatchFlags.BATCH_ALL)
+        self.samples = ElementFactory(self, Sample)
 
-        self.artifacts = ElementFactory(self, Artifact, batch_flags=BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE)
+        self.artifacts = ElementFactory(self, Artifact)
 
-        self.files = ElementFactory(self, File, batch_flags=BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE)
+        self.files = ElementFactory(self, File)
 
-        self.containers = ElementFactory(self, Container, batch_flags=BatchFlags.BATCH_ALL)
+        self.containers = ElementFactory(self, Container)
 
-        self.container_types = ElementFactory(self, ContainerType, batch_flags=BatchFlags.QUERY)
+        self.container_types = ElementFactory(self, ContainerType)
 
-        self.projects = ElementFactory(self, Project, batch_flags=BatchFlags.QUERY)
+        self.projects = ElementFactory(self, Project)
 
         self.control_types = ElementFactory(self, ControlType)
 
         self.queues = ElementFactory(self, Queue)
 
-        self.reagent_lots = ElementFactory(self, ReagentLot, batch_flags=BatchFlags.QUERY)
+        self.reagent_lots = ElementFactory(self, ReagentLot)
 
-        self.reagent_kits = ElementFactory(self, ReagentKit, batch_flags=BatchFlags.QUERY)
+        self.reagent_kits = ElementFactory(self, ReagentKit)
 
-        self.reagent_types = ElementFactory(self, ReagentType, batch_flags=BatchFlags.QUERY)
+        self.reagent_types = ElementFactory(self, ReagentType)
 
-        self.researchers = ElementFactory(self, Researcher, batch_flags=BatchFlags.QUERY)
+        self.researchers = ElementFactory(self, Researcher)
 
-        self.labs = ElementFactory(self, Lab, batch_flags=BatchFlags.QUERY)
+        self.labs = ElementFactory(self, Lab)
 
-        self.roles = ElementFactory(self, Role, batch_flags=BatchFlags.QUERY)
+        self.roles = ElementFactory(self, Role)
 
-        self.permissions = ElementFactory(self, Permission, batch_flags=BatchFlags.QUERY)
+        self.permissions = ElementFactory(self, Permission)
 
         # configuration
         from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation
 
-        self.workflows = ElementFactory(self, Workflow, batch_flags=BatchFlags.QUERY,
-                                        request_path='/configuration/workflows')
-        self.protocols = ElementFactory(self, Protocol, batch_flags=BatchFlags.QUERY,
-                                        request_path='/configuration/protocols')
-        self.udfs = UdfFactory(self, Udf, batch_flags=BatchFlags.QUERY,
-                               request_path='/configuration/udfs')
-        self.process_types = ElementFactory(self, ProcessType, batch_flags=BatchFlags.QUERY,
-                                            name_attribute="displayname")
-        self.process_templates = ElementFactory(self, ProcessTemplate, batch_flags=BatchFlags.QUERY,
-                                                name_attribute="name")
-        self.automations = ElementFactory(self, Automation, batch_flags=BatchFlags.QUERY,
-                                          name_attribute="name", request_path="/configuration/automations")
+        self.workflows = ElementFactory(self, Workflow, request_path='/configuration/workflows')
+
+        self.protocols = ElementFactory(self, Protocol, request_path='/configuration/protocols')
+        self.udfs = UdfFactory(self, Udf, request_path='/configuration/udfs')
+        self.process_types = ElementFactory(self, ProcessType, name_attribute="displayname")
+        self.process_templates = ElementFactory(self, ProcessTemplate, name_attribute="name")
+        self.automations = ElementFactory(self, Automation, name_attribute="name", request_path="/configuration/automations")
 
         self.stages = ElementFactory(self, Stage)
 
