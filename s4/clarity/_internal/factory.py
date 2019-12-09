@@ -45,13 +45,20 @@ class ElementFactory(object):
 
     def __init__(self, lims, element_class):
         """
+        Creates a new factory to provide interface between Clarity LIMS and the client software.
+        The provided `element_class` will be used to convert the XML records into Python objects
+        and back. There are several class attributes that can be set to configure this interface.
+
+        NAME_ATTRIBUTE: This is used if the name of the class differs from the name in the Clarity API
+
+        REQUEST_PATH: If the class has the REQUEST_PATH attribute then it will
+        be used to override the default path. It is used in relation to the root URI of the Clarity API.
+
+        BATCH_FLAGS: Batch Flags use the BitField enumeration to create a bit field that is used
+        to determine what batch services are provided for this data type. It defaults to None.
+
         :type lims: LIMS
         :type element_class: classobj
-        :type request_path: str
-        :param request_path: for example, '/configuration/workflows'.
-                             when not specified, uses '/<plural of element name>'.
-        :type name_attribute: str
-        :param name_attribute: if not "name", provide this to adjust behaviour of 'get_by_name'.
         """
 
         self.lims = lims
@@ -156,28 +163,28 @@ class ElementFactory(object):
         """
         Indicates if Clarity will allow batch get requests.
         """
-        return self.batch_flags & BatchFlags.BATCH_GET
+        return bool(self.batch_flags & BatchFlags.BATCH_GET)
 
     def can_batch_update(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow batch updates.
         """
-        return self.batch_flags & BatchFlags.BATCH_UPDATE
+        return bool(self.batch_flags & BatchFlags.BATCH_UPDATE)
 
     def can_batch_create(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow batch record creation.
         """
-        return self.batch_flags & BatchFlags.BATCH_CREATE
+        return bool(self.batch_flags & BatchFlags.BATCH_CREATE)
 
     def can_query(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow the user to submit queries.
         """
-        return self.batch_flags & BatchFlags.QUERY
+        return bool(self.batch_flags & BatchFlags.QUERY)
 
     def from_link_node(self, xml_node):
         # type: (ETree.Element) -> ClarityElement or None
