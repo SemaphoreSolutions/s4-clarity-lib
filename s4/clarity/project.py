@@ -10,7 +10,6 @@ from s4.clarity import types
 class Project(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/project}project"
     BATCH_FLAGS = BatchFlags.QUERY
-
     ATTACH_TO_NAME = "Project"
 
     open_date = subnode_property("open-date", types.DATE)

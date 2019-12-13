@@ -49,7 +49,7 @@ class ElementFactory(object):
         The provided `element_class` will be used to convert the XML records into Python objects
         and back. There are several class attributes that can be set to configure this interface.
 
-        NAME_ATTRIBUTE: This is used if the name of the class differs from the name in the Clarity API
+        NAME_ATTRIBUTE: This is used if the name of the class differs from the name in the Clarity API.
 
         REQUEST_PATH: If the class has the REQUEST_PATH attribute then it will
         be used to override the default path. It is used in relation to the root URI of the Clarity API.
