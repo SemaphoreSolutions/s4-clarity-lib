@@ -39,8 +39,6 @@ class LIMS(object):
     :ivar ElementFactory permissions: Factory for :class:`s4.clarity.permission.Permission`
     """
 
-    _HOST_RE = re.compile(r'https?://([^/:]+)')
-
     def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False):
         """
         Constructs a new LIMS object. This will provide an interface to the Clarity LIMS server, found
@@ -64,25 +62,12 @@ class LIMS(object):
 
         # strip off the trailing `/` from the URI if one was included
         self.root_uri = root_uri.rstrip("/")
-
-        # Verify that our root uri looks like a properly formed URI
-        hostname_match = self._HOST_RE.match(self.root_uri)
-        if not hostname_match:
-            raise Exception("No hostname found in LIMS uri: %s" % self.root_uri)
-
-        # Using the same RegEx query select out the hostname from the URI
-        self.hostname = hostname_match.group(1)
+        self.hostname = self._get_hostname()
 
         self._opened_ssh_tunnel = False
         self._insecure = insecure
         self.log_requests = log_requests
-
-        if "dev" in self.hostname:
-            self.environment = "dev"
-        elif "test" in self.hostname:
-            self.environment = "test"
-        else:
-            self.environment = "production"
+        self.environment = self._get_environment()
 
         self.username = username
         self.password = password
@@ -161,6 +146,47 @@ class LIMS(object):
         self.automations = ElementFactory(self, Automation)
 
         self.stages = ElementFactory(self, Stage)
+
+    def _get_hostname(self):
+        # type: () -> str
+        """
+        Verify that we have a valid hostname in our root uri
+        and isolate the host name from it.
+        :return: The name of the Clarity server.
+        """
+
+        # Compile a regex statement to isolate the host name
+        # and verify that our root uri looks like a properly formed URI
+        hostname_finding_regex = re.compile(r'https?://([^/:]+)')
+
+        # Then use it to validate our uri
+        hostname_match = hostname_finding_regex.match(self.root_uri)
+        if not hostname_match:
+            raise Exception("No hostname found in LIMS uri: %s" % self.root_uri)
+
+        # Using the same RegEx query select out the hostname from the URI
+        return hostname_match.group(1)
+
+    def _get_environment(self):
+        """
+        We make some assumptions about the server's purpose based on
+        the presence of keywords in the name. This matches the common naming
+        schemes for servers.
+
+        ex: clarity-dev.client_domain.com
+            clarity-test.client_domain.com
+            clarity.client_domain.com
+
+        :return: A string identifying the environment.
+        """
+
+        if "dev" in self.hostname:
+            return "dev"
+
+        if "test" in self.hostname:
+            return "test"
+
+        return "production"
 
     def factory_for(self, element_type):
         """
