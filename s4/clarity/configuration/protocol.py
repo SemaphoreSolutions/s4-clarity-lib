@@ -1,8 +1,7 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 
-from s4.clarity._internal.element import ClarityElement, WrappedXml
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import ClarityElement, WrappedXml, BatchFlags
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
 from s4.clarity._internal.props import subnode_property_list_of_dicts, subnode_property, subnode_property_literal_dict, attribute_property, subnode_element_list

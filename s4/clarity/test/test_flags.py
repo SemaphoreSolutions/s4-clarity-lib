@@ -3,6 +3,7 @@
 
 from unittest import TestCase
 
+import s4.clarity._internal.element
 import s4.clarity._internal.factory
 
 
@@ -13,8 +14,8 @@ class TestFlags(TestCase):
         Are flags sane?
         """
         self.assertTrue(
-            s4.clarity._internal.factory.BatchFlags.BATCH_ALL & s4.clarity._internal.factory.BatchFlags.BATCH_CREATE
+            s4.clarity._internal.element.BatchFlags.BATCH_ALL & s4.clarity._internal.element.BatchFlags.BATCH_CREATE
         )
         self.assertFalse(
-            s4.clarity._internal.factory.BatchFlags.BATCH_ALL & s4.clarity._internal.factory.BatchFlags.NONE
+            s4.clarity._internal.element.BatchFlags.BATCH_ALL & s4.clarity._internal.element.BatchFlags.NONE
         )

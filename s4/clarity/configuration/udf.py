@@ -2,7 +2,7 @@
 # ---------------------------------------------------------------------------
 from s4.clarity import ETree
 from s4.clarity._internal import ClarityElement
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity._internal.props import subnode_property, attribute_property
 from s4.clarity import types
 

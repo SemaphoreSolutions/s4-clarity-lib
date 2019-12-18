@@ -5,7 +5,7 @@ import logging
 import time
 import re
 
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity.artifact import Artifact
 from s4.clarity.researcher import Researcher
 from s4.clarity import lazy_property

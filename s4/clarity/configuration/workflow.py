@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity._internal.props import attribute_property
 from s4.clarity import ClarityElement, lazy_property
 from .stage import Stage

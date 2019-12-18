@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 from ._internal.props import subnode_property, subnode_link
 from .reagent_kit import ReagentKit

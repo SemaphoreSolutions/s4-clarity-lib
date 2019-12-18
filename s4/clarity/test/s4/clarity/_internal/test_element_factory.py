@@ -1,6 +1,7 @@
 
 from unittest import TestCase
-from s4.clarity._internal.factory import BatchFlags, ElementFactory
+from s4.clarity._internal.factory import ElementFactory
+from s4.clarity._internal.element import BatchFlags
 
 
 class LocalLIMS(object):

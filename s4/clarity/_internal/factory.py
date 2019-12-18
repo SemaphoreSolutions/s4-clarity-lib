@@ -1,12 +1,13 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-from typing import List, Iterable, Tuple
+from typing import List, Iterable, Tuple, Optional
 
 from six.moves.urllib.parse import urlencode
 from s4.clarity import ClarityException
 from s4.clarity import ETree
 import re
-from .element import ClarityElement
+
+from .element import ClarityElement, BatchFlags
 
 
 class NoMatchingElement(ClarityException):
@@ -15,16 +16,6 @@ class NoMatchingElement(ClarityException):
 
 class MultipleMatchingElements(ClarityException):
     pass
-
-
-class BatchFlags(int):
-    NONE = 0
-    BATCH_CREATE = 1
-    BATCH_GET = 2
-    BATCH_UPDATE = 4
-    QUERY = 8
-
-    BATCH_ALL = 15  # all options, or'd
 
 
 class ElementFactory(object):
@@ -73,6 +64,12 @@ class ElementFactory(object):
         lims.factories[element_class] = self
 
     def _get_name_attribute(self):
+        # type: () -> str
+        """
+        Returns the name of the xml attribute that contains the element name.
+        :return: The name of the attribute that holds the name of the element.
+        """
+
         if hasattr(self.element_class, 'NAME_ATTRIBUTE'):
             return self.element_class.NAME_ATTRIBUTE
         return "name"
@@ -187,7 +184,7 @@ class ElementFactory(object):
         return bool(self.batch_flags & BatchFlags.QUERY)
 
     def from_link_node(self, xml_node):
-        # type: (ETree.Element) -> ClarityElement or None
+        # type: (ETree.Element) -> Optional[ClarityElement]
         """
         Will return the ClarityElement described by the link node.
 

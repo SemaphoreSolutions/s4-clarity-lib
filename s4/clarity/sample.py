@@ -3,7 +3,7 @@
 
 import logging
 
-from s4.clarity._internal.factory import BatchFlags
+from s4.clarity._internal.element import BatchFlags
 from ._internal import FieldsMixin, ClarityElement
 from ._internal.props import subnode_property, subnode_link
 from s4.clarity.project import Project
