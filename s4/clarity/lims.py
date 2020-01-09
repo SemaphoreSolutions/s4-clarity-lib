@@ -42,15 +42,15 @@ class LIMS(object):
     def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False):
         """
         Constructs a new LIMS object. This will provide an interface to the Clarity LIMS server, found
-        at the Root URI. The user name and password provided will be used to authenticate with Clarity and
+        at the `root_uri`. The `username` and `password` provided will be used to authenticate with Clarity and
         all actions taken by the script will be done as that user.
 
-        If a Dry Run is selected then no data will be sent back to Clarity.
+        If `dry_run` is selected then no data will be sent back to Clarity, but queries for data will be.
 
-        If Insecure is selected then the SSL Certificate used does not need to be signed by a signing authority.
+        If `insecure` is set to True then the SSL Certificate used does not need to be signed by a signing authority.
         This is useful in the case where you are operating against a development server using a self signed cert.
 
-        Log Requests will create log entries for each HTTP request made.
+        `log_requests` will create log entries for each HTTP request made.
 
         :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
         :param str username: Clarity User Name
@@ -97,54 +97,32 @@ class LIMS(object):
         self.factories = {}
 
         self.steps = StepFactory(self, Step)
-
         self.processes = ElementFactory(self, Process)
-
         self.samples = ElementFactory(self, Sample)
-
         self.artifacts = ElementFactory(self, Artifact)
-
         self.files = ElementFactory(self, File)
-
         self.containers = ElementFactory(self, Container)
-
         self.container_types = ElementFactory(self, ContainerType)
-
         self.projects = ElementFactory(self, Project)
-
         self.control_types = ElementFactory(self, ControlType)
-
         self.queues = ElementFactory(self, Queue)
-
         self.reagent_lots = ElementFactory(self, ReagentLot)
-
         self.reagent_kits = ElementFactory(self, ReagentKit)
-
         self.reagent_types = ElementFactory(self, ReagentType)
-
         self.researchers = ElementFactory(self, Researcher)
-
         self.labs = ElementFactory(self, Lab)
-
         self.roles = ElementFactory(self, Role)
-
         self.permissions = ElementFactory(self, Permission)
 
         # configuration
         from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation
 
         self.workflows = ElementFactory(self, Workflow)
-
         self.protocols = ElementFactory(self, Protocol)
-
         self.udfs = UdfFactory(self, Udf)
-
         self.process_types = ElementFactory(self, ProcessType)
-
         self.process_templates = ElementFactory(self, ProcessTemplate)
-
         self.automations = ElementFactory(self, Automation)
-
         self.stages = ElementFactory(self, Stage)
 
     def _get_hostname(self):

@@ -38,12 +38,13 @@ class ElementFactory(object):
         """
         Creates a new factory to provide interface between Clarity LIMS and the client software.
         The provided `element_class` will be used to convert the XML records into Python objects
-        and back. There are several class attributes that can be set to configure this interface.
+        and back. There are several class attributes that can be set to provide an interface.
 
-        NAME_ATTRIBUTE: This is used if the name of the class differs from the name in the Clarity API.
+        NAME_ATTRIBUTE: The XML attribute that contains the name of this type of element. Default 'name'.
 
         REQUEST_PATH: If the class has the REQUEST_PATH attribute then it will
-        be used to override the default path. It is used in relation to the root URI of the Clarity API.
+        be used to override the default path, which is the plural of the element name.
+        It is used in relation to the root URI of the Clarity API.
 
         BATCH_FLAGS: Batch Flags use the BitField enumeration to create a bit field that is used
         to determine what batch services are provided for this data type. It defaults to None.
@@ -54,58 +55,14 @@ class ElementFactory(object):
 
         self.lims = lims
         self.element_class = element_class
-        self.name_attribute = self._get_name_attribute()
-        self.batch_flags = self._get_batch_flag()
+        self.name_attribute = getattr(self.element_class, 'NAME_ATTRIBUTE', "name")
+        self.batch_flags = getattr(self.element_class, 'BATCH_FLAGS', BatchFlags.NONE)
         self._plural_name = self.element_class.__name__.lower() + "s"
-        self.uri = self._get_endpoint_uri()
+        self.uri = self.lims.root_uri + getattr(self.element_class, 'REQUEST_PATH', "/" + self._plural_name)
 
         self._cache = dict()
 
         lims.factories[element_class] = self
-
-    def _get_name_attribute(self):
-        # type: () -> str
-        """
-        Returns the name of the xml attribute that contains the element name.
-        :return: The name of the attribute that holds the name of the element.
-        """
-
-        if hasattr(self.element_class, 'NAME_ATTRIBUTE'):
-            return self.element_class.NAME_ATTRIBUTE
-        return "name"
-
-    def _get_endpoint_uri(self):
-        # type: () -> str
-        """
-        Returns the Clarity endpoint URI the factory will manage.
-        :return: The fully qualified endpoint URI for this data type.
-        """
-
-        # If the class has the REQUEST_PATH attribute then it will
-        # be used to override the default path.
-        if hasattr(self.element_class, 'REQUEST_PATH'):
-            request_path = self.element_class.REQUEST_PATH
-        else:
-            # The default is the plural name, ex:
-            # /api/v2/steps
-            request_path = "/" + self._plural_name
-
-        # Generate our uri with the request path
-        # in relation to the root uri
-        return self.lims.root_uri + request_path
-
-    def _get_batch_flag(self):
-        # type: () -> int
-        """
-        Reads the batch flag attribute from the element class.
-        This will be defined on the BATCH_FLAGS class property.
-        If this is not defined it is assumed there is no batching.
-        :return: The class's batch flags.
-        """
-
-        if hasattr(self.element_class, 'BATCH_FLAGS'):
-            return self.element_class.BATCH_FLAGS
-        return BatchFlags.NONE
 
     def new(self, **kwargs):
         # type: (**str) -> ClarityElement
