@@ -1,10 +1,10 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-from typing import List, Iterable, Tuple, Optional
+from typing import List, Iterable, Tuple, Optional, Type
 
 from six.moves.urllib.parse import urlencode
-from s4.clarity import ClarityException
-from s4.clarity import ETree
+from s4.clarity import ClarityException, ETree
+import s4.clarity  # for typing
 import re
 
 from .element import ClarityElement, BatchFlags
@@ -23,7 +23,7 @@ class ElementFactory(object):
     Provides access to a Clarity API endpoint. Implements conversion between XML and ClarityElement
     as well as caching and network services.
 
-    :type lims: LIMS
+    :type lims: s4.clarity.LIMS
     :type element_class: classobj
     :type batch_flags: s4.clarity.BatchFlags
     """
@@ -34,23 +34,27 @@ class ElementFactory(object):
     def _strip_params(string):
         return ElementFactory._params_re.sub('', string)
 
-    def __init__(self, lims, element_class):
+    def __init__(self,
+                 lims,          # type: s4.clarity.LIMS
+                 element_class  # type: Type[ClarityElement]
+                 ):
         """
-        Creates a new factory to provide interface between Clarity LIMS and the client software.
-        The provided `element_class` will be used to convert the XML records into Python objects
-        and back. There are several class attributes that can be set to provide an interface.
+        Creates a new factory for `element_class`, intended to be used by/with the provided 
+        `lims` instance to build Python objects to represent records in Clarity LIMS.
+        
+        If present, the following class attributes on `element_class` will be used as 
+        configuration for this factory instance:
+        
+        NAME_ATTRIBUTE: (str) Name of the XML attribute in records of this object that
+                        contains the name of the object. Defaults to "name".
 
-        NAME_ATTRIBUTE: The XML attribute that contains the name of this type of element. Default 'name'.
-
-        REQUEST_PATH: If the class has the REQUEST_PATH attribute then it will
-        be used to override the default path, which is the plural of the element name.
-        It is used in relation to the root URI of the Clarity API.
-
-        BATCH_FLAGS: Batch Flags use the BitField enumeration to create a bit field that is used
-        to determine what batch services are provided for this data type. It defaults to None.
-
-        :type lims: LIMS
-        :type element_class: classobj
+        REQUEST_PATH: (str) Path (appended to the root URI of the `lims` instance) where
+                      queries for objects of the given type should be sent.
+                      Defaults to the plural of the element name, e.g. "artifacts" 
+                      for Artifact.
+        
+        BATCH_FLAGS: (s4.clarity.BatchFlags) Determines which batch services the `lims` 
+                     provides for the given element class. Defaults to `BatchFlags.NONE`.
         """
 
         self.lims = lims
