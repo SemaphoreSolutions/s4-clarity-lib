@@ -310,6 +310,7 @@ class StepRunner:
             raise Exception("The post_tube_to_tube method can only be called with tube-like containers.")
 
         self.step.placements.clear_placements()
+        self.step.placements.clear_selected_containers()
 
         new_containers = self.lims.containers.batch_create(
             [self.lims.containers.new(name=output.limsid, container_type=container_type)
