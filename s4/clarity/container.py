@@ -178,4 +178,7 @@ class Container(FieldsMixin, ClarityElement):
 
         :rtype: Artifact or None
         """
-        return self.placements[well]
+        try:
+            return self.placements[well]
+        except KeyError:
+            raise KeyError("Container '%s' has no artifact at '%s'." % (self.name, well))
