@@ -11,7 +11,6 @@ import urllib3
 # Ensure Python 2 and 3 compatibility
 from six import BytesIO, b
 
-from s4.clarity._internal.factory import BatchFlags
 from s4.clarity._internal.stepfactory import StepFactory, ElementFactory
 from s4.clarity._internal.udffactory import UdfFactory
 from s4.clarity._internal.lazy_property import lazy_property
@@ -23,11 +22,6 @@ log = logging.getLogger(__name__)
 
 class LIMS(object):
     """
-    :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
-    :param str username: Clarity User Name
-    :param str password: Clarity Password
-    :param bool dry_run: If True, do not actually make calls to Clarity
-    :param bool insecure: Disables SSL validation
 
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
     :ivar ElementFactory samples: Factory for :class:`s4.clarity.sample.Sample`
@@ -45,28 +39,35 @@ class LIMS(object):
     :ivar ElementFactory permissions: Factory for :class:`s4.clarity.permission.Permission`
     """
 
-    _HOST_RE = re.compile(r'https?://([^/:]+)')
-
     def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False):
-        if root_uri.endswith("/"):
-            self.root_uri = root_uri[:-1]  # strip off /
-        else:
-            self.root_uri = root_uri
+        """
+        Constructs a new LIMS object. This will provide an interface to the Clarity LIMS server, found
+        at the `root_uri`. The `username` and `password` provided will be used to authenticate with Clarity and
+        all actions taken by the script will be done as that user.
 
-        hostname_match = self._HOST_RE.match(self.root_uri)
-        if not hostname_match:
-            raise Exception("No hostname found in LIMS uri: %s" % self.root_uri)
-        self.hostname = hostname_match.group(1)
+        If `dry_run` is selected then no data will be sent back to Clarity, but queries for data will be.
+
+        If `insecure` is set to True then the SSL Certificate used does not need to be signed by a signing authority.
+        This is useful in the case where you are operating against a development server using a self signed cert.
+
+        `log_requests` will create log entries for each HTTP request made.
+
+        :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
+        :param str username: Clarity User Name
+        :param str password: Clarity Password
+        :param bool dry_run: If True, do not actually make calls to Clarity
+        :param bool insecure: Disables SSL validation
+        :param log_requests: Log extra information about HTTP requests
+        """
+
+        # strip off the trailing `/` from the URI if one was included
+        self.root_uri = root_uri.rstrip("/")
+        self.hostname = self._get_hostname()
+
         self._opened_ssh_tunnel = False
         self._insecure = insecure
         self.log_requests = log_requests
-
-        if "dev" in self.hostname:
-            self.environment = "dev"
-        elif "test" in self.hostname:
-            self.environment = "test"
-        else:
-            self.environment = "production"
+        self.environment = self._get_environment()
 
         self.username = username
         self.password = password
@@ -91,60 +92,79 @@ class LIMS(object):
         from .configuration.stage import Stage
         from .lab import Lab
 
+        # Initialise the list of factories. The element factories will
+        # add themselves to this dictionary when they are created
         self.factories = {}
 
-        # there's no need to make these lazy, we are probably using at least a couple of them
-        self.steps = StepFactory(self, Step, batch_flags=BatchFlags.QUERY)
-
-        self.processes = ElementFactory(self, Process, batch_flags=BatchFlags.QUERY, request_path='/processes')
-
-        self.samples = ElementFactory(self, Sample, batch_flags=BatchFlags.BATCH_ALL)
-
-        self.artifacts = ElementFactory(self, Artifact, batch_flags=BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE)
-
-        self.files = ElementFactory(self, File, batch_flags=BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE)
-
-        self.containers = ElementFactory(self, Container, batch_flags=BatchFlags.BATCH_ALL)
-
-        self.container_types = ElementFactory(self, ContainerType, batch_flags=BatchFlags.QUERY)
-
-        self.projects = ElementFactory(self, Project, batch_flags=BatchFlags.QUERY)
-
+        self.steps = StepFactory(self, Step)
+        self.processes = ElementFactory(self, Process)
+        self.samples = ElementFactory(self, Sample)
+        self.artifacts = ElementFactory(self, Artifact)
+        self.files = ElementFactory(self, File)
+        self.containers = ElementFactory(self, Container)
+        self.container_types = ElementFactory(self, ContainerType)
+        self.projects = ElementFactory(self, Project)
         self.control_types = ElementFactory(self, ControlType)
-
         self.queues = ElementFactory(self, Queue)
-
-        self.reagent_lots = ElementFactory(self, ReagentLot, batch_flags=BatchFlags.QUERY)
-
-        self.reagent_kits = ElementFactory(self, ReagentKit, batch_flags=BatchFlags.QUERY)
-
-        self.reagent_types = ElementFactory(self, ReagentType, batch_flags=BatchFlags.QUERY)
-
-        self.researchers = ElementFactory(self, Researcher, batch_flags=BatchFlags.QUERY)
-
-        self.labs = ElementFactory(self, Lab, batch_flags=BatchFlags.QUERY)
-
-        self.roles = ElementFactory(self, Role, batch_flags=BatchFlags.QUERY)
-
-        self.permissions = ElementFactory(self, Permission, batch_flags=BatchFlags.QUERY)
+        self.reagent_lots = ElementFactory(self, ReagentLot)
+        self.reagent_kits = ElementFactory(self, ReagentKit)
+        self.reagent_types = ElementFactory(self, ReagentType)
+        self.researchers = ElementFactory(self, Researcher)
+        self.labs = ElementFactory(self, Lab)
+        self.roles = ElementFactory(self, Role)
+        self.permissions = ElementFactory(self, Permission)
 
         # configuration
         from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation
 
-        self.workflows = ElementFactory(self, Workflow, batch_flags=BatchFlags.QUERY,
-                                        request_path='/configuration/workflows')
-        self.protocols = ElementFactory(self, Protocol, batch_flags=BatchFlags.QUERY,
-                                        request_path='/configuration/protocols')
-        self.udfs = UdfFactory(self, Udf, batch_flags=BatchFlags.QUERY,
-                               request_path='/configuration/udfs')
-        self.process_types = ElementFactory(self, ProcessType, batch_flags=BatchFlags.QUERY,
-                                            name_attribute="displayname")
-        self.process_templates = ElementFactory(self, ProcessTemplate, batch_flags=BatchFlags.QUERY,
-                                                name_attribute="name")
-        self.automations = ElementFactory(self, Automation, batch_flags=BatchFlags.QUERY,
-                                          name_attribute="name", request_path="/configuration/automations")
-
+        self.workflows = ElementFactory(self, Workflow)
+        self.protocols = ElementFactory(self, Protocol)
+        self.udfs = UdfFactory(self, Udf)
+        self.process_types = ElementFactory(self, ProcessType)
+        self.process_templates = ElementFactory(self, ProcessTemplate)
+        self.automations = ElementFactory(self, Automation)
         self.stages = ElementFactory(self, Stage)
+
+    def _get_hostname(self):
+        # type: () -> str
+        """
+        Verify that we have a valid hostname in our root uri
+        and isolate the host name from it.
+        :return: The name of the Clarity server.
+        """
+
+        # Compile a regex statement to isolate the host name
+        # and verify that our root uri looks like a properly formed URI
+        hostname_finding_regex = re.compile(r'https?://([^/:]+)')
+
+        # Then use it to validate our uri
+        hostname_match = hostname_finding_regex.match(self.root_uri)
+        if not hostname_match:
+            raise Exception("No hostname found in LIMS uri: %s" % self.root_uri)
+
+        # Using the same RegEx query select out the hostname from the URI
+        return hostname_match.group(1)
+
+    def _get_environment(self):
+        """
+        We make some assumptions about the server's purpose based on
+        the presence of keywords in the name. This matches the common naming
+        schemes for servers.
+
+        ex: clarity-dev.client_domain.com
+            clarity-test.client_domain.com
+            clarity.client_domain.com
+
+        :return: A string identifying the environment.
+        """
+
+        if "dev" in self.hostname:
+            return "dev"
+
+        if "test" in self.hostname:
+            return "test"
+
+        return "production"
 
     def factory_for(self, element_type):
         """

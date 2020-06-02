@@ -2,6 +2,8 @@
 # ---------------------------------------------------------------------------
 
 from future.utils import python_2_unicode_compatible
+
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 from ._internal.props import subnode_property, subnode_property_literal_dict
 from s4.clarity import ETree
@@ -9,6 +11,7 @@ from s4.clarity import ETree
 
 class ReagentType(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagenttype}reagent-type"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     @python_2_unicode_compatible
     def __str__(self):

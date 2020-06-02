@@ -1,12 +1,13 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-from typing import List, Iterable, Tuple
+from typing import List, Iterable, Tuple, Optional, Type
 
 from six.moves.urllib.parse import urlencode
-from s4.clarity import ClarityException
-from s4.clarity import ETree
+from s4.clarity import ClarityException, ETree
+import s4.clarity  # for typing
 import re
-from .element import ClarityElement
+
+from .element import ClarityElement, BatchFlags
 
 
 class NoMatchingElement(ClarityException):
@@ -17,22 +18,12 @@ class MultipleMatchingElements(ClarityException):
     pass
 
 
-class BatchFlags(int):
-    NONE = 0
-    BATCH_CREATE = 1
-    BATCH_GET = 2
-    BATCH_UPDATE = 4
-    QUERY = 8
-
-    BATCH_ALL = 15  # all options, or'd
-
-
 class ElementFactory(object):
     """
     Provides access to a Clarity API endpoint. Implements conversion between XML and ClarityElement
     as well as caching and network services.
 
-    :type lims: LIMS
+    :type lims: s4.clarity.LIMS
     :type element_class: classobj
     :type batch_flags: s4.clarity.BatchFlags
     """
@@ -43,27 +34,35 @@ class ElementFactory(object):
     def _strip_params(string):
         return ElementFactory._params_re.sub('', string)
 
-    def __init__(self, lims, element_class, batch_flags=None, request_path=None, name_attribute="name"):
+    def __init__(self,
+                 lims,          # type: s4.clarity.LIMS
+                 element_class  # type: Type[ClarityElement]
+                 ):
         """
-        :type lims: LIMS
-        :type element_class: classobj
-        :type batch_flags: BatchFlags or None
-        :type request_path: str
-        :param request_path: for example, '/configuration/workflows'.
-                             when not specified, uses '/<plural of element name>'.
-        :type name_attribute: str
-        :param name_attribute: if not "name", provide this to adjust behaviour of 'get_by_name'.
+        Creates a new factory for `element_class`, intended to be used by/with the provided 
+        `lims` instance to build Python objects to represent records in Clarity LIMS.
+        
+        If present, the following class attributes on `element_class` will be used as 
+        configuration for this factory instance:
+        
+        NAME_ATTRIBUTE: (str) Name of the XML attribute in records of this object that
+                        contains the name of the object. Defaults to "name".
+
+        REQUEST_PATH: (str) Path (appended to the root URI of the `lims` instance) where
+                      queries for objects of the given type should be sent.
+                      Defaults to the plural of the element name, e.g. "artifacts" 
+                      for Artifact.
+        
+        BATCH_FLAGS: (s4.clarity.BatchFlags) Determines which batch services the `lims` 
+                     provides for the given element class. Defaults to `BatchFlags.NONE`.
         """
 
         self.lims = lims
         self.element_class = element_class
-        self.name_attribute = name_attribute
-        self.batch_flags = batch_flags or BatchFlags.NONE
+        self.name_attribute = getattr(self.element_class, 'NAME_ATTRIBUTE', "name")
+        self.batch_flags = getattr(self.element_class, 'BATCH_FLAGS', BatchFlags.NONE)
         self._plural_name = self.element_class.__name__.lower() + "s"
-
-        if request_path is None:
-            request_path = "/" + self._plural_name
-        self.uri = lims.root_uri + request_path
+        self.uri = self.lims.root_uri + getattr(self.element_class, 'REQUEST_PATH', "/" + self._plural_name)
 
         self._cache = dict()
 
@@ -122,31 +121,31 @@ class ElementFactory(object):
         """
         Indicates if Clarity will allow batch get requests.
         """
-        return self.batch_flags & BatchFlags.BATCH_GET
+        return bool(self.batch_flags & BatchFlags.BATCH_GET)
 
     def can_batch_update(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow batch updates.
         """
-        return self.batch_flags & BatchFlags.BATCH_UPDATE
+        return bool(self.batch_flags & BatchFlags.BATCH_UPDATE)
 
     def can_batch_create(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow batch record creation.
         """
-        return self.batch_flags & BatchFlags.BATCH_CREATE
+        return bool(self.batch_flags & BatchFlags.BATCH_CREATE)
 
     def can_query(self):
         # type: () -> bool
         """
         Indicates if Clarity will allow the user to submit queries.
         """
-        return self.batch_flags & BatchFlags.QUERY
+        return bool(self.batch_flags & BatchFlags.QUERY)
 
     def from_link_node(self, xml_node):
-        # type: (ETree.Element) -> ClarityElement
+        # type: (ETree.Element) -> Optional[ClarityElement]
         """
         Will return the ClarityElement described by the link node.
 

@@ -9,6 +9,16 @@ from .lazy_property import lazy_property
 log = logging.getLogger(__name__)
 
 
+class BatchFlags(int):
+    NONE = 0
+    BATCH_CREATE = 1
+    BATCH_GET = 2
+    BATCH_UPDATE = 4
+    QUERY = 8
+
+    BATCH_ALL = 15  # all options, or'd
+
+
 class WrappedXml(object):
     def __init__(self, lims, xml_root=None):
         self.lims = lims
@@ -123,6 +133,7 @@ class ClarityElement(WrappedXml):
     """
 
     UNIVERSAL_TAG = None
+    BATCH_FLAGS = BatchFlags.NONE
 
     def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None):
         super(ClarityElement, self).__init__(lims, None)

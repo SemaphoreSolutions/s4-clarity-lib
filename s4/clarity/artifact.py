@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import WrappedXml, FieldsMixin, ClarityElement
 from ._internal.props import subnode_property, subnode_element_list, attribute_property, subnode_link
 from s4.clarity.file import File
@@ -34,6 +34,7 @@ class Artifact(FieldsMixin, ClarityElement):
     Reference: https://www.genologics.com/files/permanent/API/latest/data_art.html#artifact
     """
     UNIVERSAL_TAG = "{http://genologics.com/ri/artifact}artifact"
+    BATCH_FLAGS = BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE
 
     type = subnode_property("type")
     output_type = subnode_property("output-type")

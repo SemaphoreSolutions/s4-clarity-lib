@@ -1,5 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity._internal.props import attribute_property
 from s4.clarity import ClarityElement, lazy_property
 from .stage import Stage
@@ -8,6 +9,8 @@ from s4.clarity.routing import Router
 
 class Workflow(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/workflowconfiguration}workflow"
+    BATCH_FLAGS = BatchFlags.QUERY
+    REQUEST_PATH = '/configuration/workflows'
 
     PENDING_STATUS = "PENDING"
     ACTIVE_STATUS = "ACTIVE"

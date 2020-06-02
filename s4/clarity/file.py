@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 
 from six import BytesIO, StringIO, string_types
@@ -23,6 +23,7 @@ class File(ClarityElement):
     """
 
     UNIVERSAL_TAG = "{http://genologics.com/ri/file}file"
+    BATCH_FLAGS = BatchFlags.BATCH_ALL & ~BatchFlags.BATCH_CREATE
 
     def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None):
         super(File, self).__init__(lims, uri, xml_root, name, limsid)

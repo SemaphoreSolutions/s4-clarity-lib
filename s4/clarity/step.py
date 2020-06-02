@@ -5,6 +5,7 @@ import logging
 import time
 import re
 
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity.artifact import Artifact
 from s4.clarity.researcher import Researcher
 from s4.clarity import lazy_property
@@ -36,6 +37,7 @@ PROGRAM_STATUS_QUEUED = "QUEUED"
 
 class Step(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}step"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     date_started = subnode_property("date-started", types.DATETIME)
     date_completed = subnode_property("date-completed", types.DATETIME)

@@ -3,11 +3,14 @@
 
 import s4.clarity._internal
 from s4.clarity import types
+from s4.clarity._internal.element import BatchFlags
 from s4.clarity._internal.props import subnode_property, subnode_property_list_of_dicts, subnode_link, subnode_links, attribute_property
 
 
 class ProcessType(s4.clarity._internal.ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/processtype}process-type"
+    BATCH_FLAGS = BatchFlags.QUERY
+    NAME_ATTRIBUTE = "displayname"
 
     inputs = subnode_property_list_of_dicts('process-input', as_attributes=["name"])
 
@@ -33,6 +36,7 @@ class ProcessType(s4.clarity._internal.ClarityElement):
 
 class ProcessTemplate(s4.clarity._internal.FieldsMixin, s4.clarity._internal.ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/processtemplate}process-template"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     type = subnode_link(ProcessType, 'type', attributes=('uri',))
 
@@ -42,6 +46,8 @@ class ProcessTemplate(s4.clarity._internal.FieldsMixin, s4.clarity._internal.Cla
 
 class Automation(s4.clarity._internal.ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/automation}automation"
+    BATCH_FLAGS = BatchFlags.QUERY
+    REQUEST_PATH = "/configuration/automations"
 
     name = attribute_property('name')
     context = subnode_property('context')

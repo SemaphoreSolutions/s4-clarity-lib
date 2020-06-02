@@ -1,6 +1,6 @@
 # Copyright 2017 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement, FieldsMixin
 from .iomaps import IOMapsMixin
 from ._internal.props import subnode_link
@@ -18,6 +18,8 @@ class Process(IOMapsMixin, FieldsMixin, ClarityElement):
     :ivar LIMS lims:
     """
     UNIVERSAL_TAG = "{http://genologics.com/ri/process}process"
+    BATCH_FLAGS = BatchFlags.QUERY
+    REQUEST_PATH = '/processes'
     ATTACH_TO_CATEGORY = "ProcessType"
     IOMAPS_XPATH = "input-output-map"
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "output-type"

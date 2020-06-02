@@ -3,6 +3,7 @@
 
 import logging
 
+from s4.clarity._internal.element import BatchFlags
 from ._internal import FieldsMixin, ClarityElement
 from ._internal.props import subnode_property, subnode_link
 from s4.clarity.project import Project
@@ -15,6 +16,7 @@ log = logging.getLogger(__name__)
 
 class Sample(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/sample}sample"
+    BATCH_FLAGS = BatchFlags.BATCH_ALL
     # special tag used for creation posts
     CREATION_TAG = "{http://genologics.com/ri/sample}samplecreation"
     ATTACH_TO_NAME = "Sample"

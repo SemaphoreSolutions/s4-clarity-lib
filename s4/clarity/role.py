@@ -1,6 +1,6 @@
 # Copyright 2017 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 from s4.clarity._internal.props import subnode_links
 from s4.clarity.permission import Permission
@@ -9,6 +9,7 @@ from s4.clarity import lazy_property
 
 class Role(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/role}role"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     # Not using subnode_links for this property, as it requires a Researcher import that creates a circular dependency
     @lazy_property

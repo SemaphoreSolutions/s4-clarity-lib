@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 from ._internal.props import subnode_property
 from s4.clarity import types, lazy_property
@@ -8,6 +8,7 @@ from s4.clarity import types, lazy_property
 
 class ReagentKit(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagentkit}reagent-kit"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     name = subnode_property("name")
     supplier = subnode_property("lot-supplier")

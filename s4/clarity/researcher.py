@@ -1,6 +1,6 @@
 # Copyright 2017 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import FieldsMixin, ClarityElement
 from s4.clarity.role import Role
 from ._internal.props import subnode_property, subnode_links, subnode_link
@@ -10,6 +10,7 @@ from s4.clarity.lab import Lab
 
 class Researcher(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/researcher}researcher"
+    BATCH_FLAGS = BatchFlags.QUERY
     ATTACH_TO_NAME = "ClientResearcher"
 
     first_name = subnode_property("first-name")

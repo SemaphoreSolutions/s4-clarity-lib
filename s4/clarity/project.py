@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement, FieldsMixin
 from s4.clarity._internal.props import subnode_property, subnode_link
 from s4.clarity.researcher import Researcher
@@ -9,6 +9,7 @@ from s4.clarity import types
 
 class Project(FieldsMixin, ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/project}project"
+    BATCH_FLAGS = BatchFlags.QUERY
     ATTACH_TO_NAME = "Project"
 
     open_date = subnode_property("open-date", types.DATE)

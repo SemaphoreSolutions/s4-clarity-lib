@@ -1,6 +1,6 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
-
+from s4.clarity._internal.element import BatchFlags
 from ._internal import ClarityElement
 from ._internal.props import subnode_property, subnode_link
 from .reagent_kit import ReagentKit
@@ -9,6 +9,7 @@ from s4.clarity import types
 
 class ReagentLot(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagentlot}reagent-lot"
+    BATCH_FLAGS = BatchFlags.QUERY
 
     reagent_kit = subnode_link(ReagentKit, "reagent-kit", attributes=('uri',))
 
