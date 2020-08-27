@@ -26,9 +26,9 @@ class LIMS(object):
     :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
     :param str username: Clarity User Name
     :param str password: Clarity Password
-    :param bool dry_run: If True, do not actually make calls to Clarity
-    :param bool insecure: Disables SSL validation
-
+    :param bool dry_run: If true, no POST or PUT requests (destructive requests) will be made to the Clarity API. Default false.
+    :param bool insecure: Disables SSL validation. Default false.
+    :param int timeout: Number of seconds to wait for connections and for reads from the Clarity API. Default 90s.
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
     :ivar ElementFactory samples: Factory for :class:`s4.clarity.sample.Sample`
     :ivar ElementFactory artifacts: Factory for :class:`s4.clarity.artifact.Artifact`
@@ -46,8 +46,9 @@ class LIMS(object):
     """
 
     _HOST_RE = re.compile(r'https?://([^/:]+)')
+    DEFAULT_TIMEOUT=90
 
-    def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False):
+    def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False, timeout=DEFAULT_TIMEOUT):
         if root_uri.endswith("/"):
             self.root_uri = root_uri[:-1]  # strip off /
         else:
@@ -71,6 +72,7 @@ class LIMS(object):
         self.username = username
         self.password = password
         self.dry_run = dry_run
+        self.timeout = timeout
 
         from .step import Step
         from .artifact import Artifact
@@ -259,7 +261,7 @@ class LIMS(object):
                 s4.clarity.utils.ssh.tunnel(real_host, 9080, "glsai")
                 self._opened_ssh_tunnel = True
 
-        response = self._session.request(method, uri, allow_redirects=False, **kwargs)
+        response = self._session.request(method, uri, timeout=self.timeout, allow_redirects=False, **kwargs)
 
         ClarityException.raise_if_present(response, data=kwargs.get("data"), username=self.username)
         log.debug("Received: %s", response.text)
