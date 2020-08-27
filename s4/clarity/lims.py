@@ -15,6 +15,7 @@ from s4.clarity._internal.factory import BatchFlags
 from s4.clarity._internal.stepfactory import StepFactory, ElementFactory
 from s4.clarity._internal.udffactory import UdfFactory
 from s4.clarity._internal.lazy_property import lazy_property
+from s4.clarity._internal.fakesession import FakeSession
 from .exception import ClarityException
 
 
@@ -26,7 +27,7 @@ class LIMS(object):
     :param str root_uri: Location of the clarity server e.g. (https://<clarity server>/api/v2/)
     :param str username: Clarity User Name
     :param str password: Clarity Password
-    :param bool dry_run: If true, no POST or PUT requests (destructive requests) will be made to the Clarity API. Default false.
+    :param bool dry_run: If true, no destructive requests will be made to the Clarity API. Default false.
     :param bool insecure: Disables SSL validation. Default false.
     :param int timeout: Number of seconds to wait for connections and for reads from the Clarity API. Default 90s.
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
@@ -164,7 +165,7 @@ class LIMS(object):
     def _session(self):
         if self.dry_run:
             log.info("LIMS dry run. No destructive requests will be sent to real LIMS.")
-            s = s4.clarity.utils.fakesession.FakeSession()
+            s = FakeSession()
         else:
             s = requests.Session()
             if self._insecure:
