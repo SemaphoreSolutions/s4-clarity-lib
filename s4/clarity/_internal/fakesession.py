@@ -17,7 +17,7 @@ class FakeSession(requests.Session):
         super(FakeSession, self).__init__()
 
     def request(self, method, url, params=None, data=None, **kwargs):
-        if method.upper() == "GET":
+        if method.upper() == "GET" or (method.upper() == "POST" and url.endswith('/batch/retrieve')):
             if params:
                 log.info("Sending real %s %s\n\tParams: %s\n", method.upper(), url, params)
             else:
