@@ -29,7 +29,7 @@ class LIMS(object):
     :param str password: Clarity Password
     :param bool dry_run: If true, no destructive requests will be made to the Clarity API. Default false.
     :param bool insecure: Disables SSL validation. Default false.
-    :param int timeout: Number of seconds to wait for connections and for reads from the Clarity API. Default 90s.
+    :param int timeout: Number of seconds to wait for connections and for reads from the Clarity API. Default None, which is no timeout.
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
     :ivar ElementFactory samples: Factory for :class:`s4.clarity.sample.Sample`
     :ivar ElementFactory artifacts: Factory for :class:`s4.clarity.artifact.Artifact`
