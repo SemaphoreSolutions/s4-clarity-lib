@@ -47,7 +47,7 @@ class LIMS(object):
     """
 
     _HOST_RE = re.compile(r'https?://([^/:]+)')
-    DEFAULT_TIMEOUT=90
+    DEFAULT_TIMEOUT=None
 
     def __init__(self, root_uri, username, password, dry_run=False, insecure=False, log_requests=False, timeout=DEFAULT_TIMEOUT):
         if root_uri.endswith("/"):
