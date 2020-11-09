@@ -134,7 +134,7 @@ class StepEPP(GenericScript):
         if StepEPP.PREFETCH_SAMPLES in categories:
             # use the artifacts that we prefetched to find samples.
             # we use a set because we may have both inputs and outputs in the artifacts_to_fetch list.
-            samples = list(set([x.sample for x in artifacts]))
+            samples = list({sample for a in artifacts for sample in a.samples})
             self.lims.samples.batch_fetch(samples)
             return samples + artifacts
 

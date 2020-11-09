@@ -10,12 +10,10 @@ from s4.clarity.artifact import Artifact
 from s4.clarity.scripts.stepepp import StepEPP
 
 
+@patch('s4.clarity.LIMS')
 class TestStepEPP(TestCase):
 
-    @patch("s4.clarity.LIMS")
     def test_prefetch(self, mock_lims):
-        stepepp = SomeStepEPP(FakeOptions)
-
         inputs = [Mock(Artifact, name='Input A'),
             Mock(Artifact, name='Input B'),
             Mock(Artifact, name='Input C')]
@@ -26,9 +24,21 @@ class TestStepEPP(TestCase):
 
         samples = ["sample0", "sample1", "sample2"]
         for i in range(len(inputs)):
-            inputs[i].sample = samples[i]
-            outputs[i].sample = samples[i]
+            inputs[i].samples = [samples[i]]
+            outputs[i].samples = [samples[i]]
 
+        self._execute_prefetch_tests(inputs, outputs, samples)
+
+    def test_prefetch_with_pools(self, mock_lims):
+        inputs = [Mock(Artifact, name='Input Pool A')]
+        outputs = [Mock(Artifact, name='Output Pool A')]
+        samples = ['sample0', 'sample1', 'sample2']
+        inputs[0].samples = samples
+        outputs[0].samples = samples
+        self._execute_prefetch_tests(inputs, outputs, samples)
+
+    def _execute_prefetch_tests(self, inputs, outputs, samples):
+        stepepp = SomeStepEPP(FakeOptions)
         stepepp.step = MagicMock(Step)
         type(stepepp.step.details).inputs = PropertyMock(return_value=inputs)
         type(stepepp.step.details).outputs = PropertyMock(return_value=outputs)
