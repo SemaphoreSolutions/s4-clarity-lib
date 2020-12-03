@@ -19,6 +19,13 @@ Artifact Action
 .. autoclass:: s4.clarity.step.ArtifactAction
     :members:
 
+Artifact Demux
+--------------
+
+.. autoclass:: s4.clarity.artifact.ArtifactDemux
+    :members:
+    :show-inheritance:
+
 Automation
 ---------------
 
@@ -68,6 +75,20 @@ Control Type
 ------------
 
 .. autoclass:: s4.clarity.control_type.ControlType
+    :members:
+    :show-inheritance:
+
+Demux Artifact
+--------------
+
+.. autoclass:: s4.clarity.artifact.DemuxArtifact
+    :members:
+    :show-inheritance:
+
+Demux Details
+-------------
+
+.. autoclass:: s4.clarity.artifact.DemuxDetails
     :members:
     :show-inheritance:
 

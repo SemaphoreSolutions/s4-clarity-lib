@@ -6,6 +6,7 @@ from ._internal.props import subnode_property, subnode_element_list, attribute_p
 from s4.clarity.file import File
 from s4.clarity.configuration.stage import Stage
 from s4.clarity.process import Process
+from s4.clarity import lazy_property
 
 QC_PASSED = "PASSED"
 QC_FAILED = "FAILED"
@@ -213,5 +214,100 @@ class Artifact(FieldsMixin, ClarityElement):
         reagent_label = self.make_subelement_with_parents("./reagent-label")
         reagent_label.set("name", reagent_label_name)
 
+    @lazy_property
+    def demux(self):
+        # type: () -> ArtifactDemux
+        """
+        Provides access to the 'demux' endpoint added in Clarity 5.1.
+
+        Using this property with an earlier version of Clarity will result in
+        a 404 Not Found error.
+
+        :type: ArtifactDemux
+        """
+        return ArtifactDemux(self.lims, self.uri + "/demux")
+
     def _get_attach_to_key(self):
         return self.type, ""
+
+
+class DemuxArtifact(WrappedXml):
+    """
+    Corresponds to the 'demux-artifact' type in the 'artifact' namespace of the Clarity API.
+    """
+    artifact = subnode_link(Artifact, ".")
+    reagent_labels = subnode_element_list(ReagentLabel, "reagent-labels", "reagent-label", readonly=True)
+
+    @property
+    def demux(self):
+        # type: () -> DemuxDetails
+        """
+        The element `DemuxDetails` from subnode 'demux'
+
+        Some versions of Clarity do not provide this element when the `DemuxArtifact`
+        is a pool of artifacts that are all from the same submitted sample. In this
+        case, if more than one artifact is labeled, the pool `Artifact`'s demux will
+        be provided, but if only one artifact is labeled, the pool's demux will not
+        be provided.
+
+        :type: DemuxDetails
+        """
+        demux_root = self.xml_root.find("./demux")
+        if (demux_root is None):
+            # In Clarity 5.2.0, if a pool contains a pool of artifacts that are all
+            # from the same submitted sample, the demux for the pool of pools will
+            # not contain a demux for that sub-pool. We can detect this case when
+            # a pool with one sample and no demux has multiple reagent labels and
+            # fill in the missing information by requesting the sub-pool's demux.
+            if (len(self.samples) == 1 and len(self.reagent_labels) > 1):
+                return self.artifact.demux.demux
+            else:
+                return None
+        return DemuxDetails(self.lims, demux_root)
+
+    @property
+    def samples(self):
+        # type: () -> list[Sample]
+        """
+        The linked `Sample` objects from the './samples/sample' subnodes
+
+        :type: list[Sample]
+        """
+        return self.lims.samples.from_link_nodes(self.xml_findall("./samples/sample"))
+
+
+class DemuxDetails(WrappedXml):
+    """
+    Corresponds to the 'demux-details' type in the 'artifact' namespace of the Clarity API.
+    """
+    demux_artifacts = subnode_element_list(DemuxArtifact, "artifacts", "artifact", readonly=True)
+
+    @property
+    def pool_step(self):
+        # type: () -> Step
+        """
+        The linked `Step` from the './pool-step' subnode
+
+        :type: Step
+        """
+        return self.lims.steps.from_link_node(self.xml_find("./pool-step"))
+
+
+class ArtifactDemux(ClarityElement):
+    """
+    Corresponds to the 'demux' type in the 'artifact' namespace of the Clarity API.
+    """
+    UNIVERSAL_TAG = "{http://genologics.com/ri/artifact}demux"
+
+    artifact = subnode_link(Artifact, "artifact")
+
+    @property
+    def demux(self):
+        # type: () -> DemuxDetails
+        """
+        The element `DemuxDetails` from subnode 'demux'
+
+        :type: DemuxDetails
+        """
+        demux_root = self.xml_root.find("./demux")
+        return DemuxDetails(self.lims, demux_root) if demux_root is not None else None

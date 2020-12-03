@@ -29,6 +29,7 @@ class FakeLims:
     def __init__(self):
         self.artifacts = FakeFactory()
         self.samples = FakeFactory()
+        self.steps = FakeFactory()
 
     def factory_for(self, element_type):
         return self.artifacts
