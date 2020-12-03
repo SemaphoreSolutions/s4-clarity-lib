@@ -1,5 +1,10 @@
 Release History
 ===============
+1.1.0
+-
+- Add suport for Clarity 5 demux endpoint
+- Add support for timeouts on Clarity HTTP requests
+
 1.0.0
 -
 - s4.scripting -> s4.clarity.scripts
