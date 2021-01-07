@@ -199,13 +199,8 @@ class Step(ClarityElement):
                     self.refresh()
                     return 0
 
-                if count > 60:
-                    break
-
                 time.sleep(1)
                 count += 1
-
-            raise EPPTimeoutException()
 
         except ClarityException:
             log.info("No EPP found.")
