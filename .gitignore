@@ -17,6 +17,9 @@
 /venv*
 *.iml
 
+# Tox
+.tox
+
 *.class
 .cache/
 
