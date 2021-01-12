@@ -1,6 +1,7 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 
+import six
 from future.utils import python_2_unicode_compatible
 import logging
 from s4.clarity import ETree
@@ -265,4 +266,4 @@ class ClarityElement(WrappedXml):
         self._xml_root = None
 
     def __repr__(self):
-        return self.xml
+        return six.ensure_str(self.xml)
