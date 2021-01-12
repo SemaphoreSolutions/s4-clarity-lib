@@ -2,7 +2,7 @@
 requests
 argparse
 python-dateutil
-six
+six>=1.12
 future
 typing
 
