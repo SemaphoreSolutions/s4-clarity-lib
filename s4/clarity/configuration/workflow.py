@@ -13,7 +13,7 @@ class Workflow(ClarityElement):
     ACTIVE_STATUS = "ACTIVE"
     ARCHIVED_STATUS = "ARCHIVED"
 
-    status = attribute_property("status")
+    status = attribute_property("status", may_use_link_node=True)
 
     @property
     def is_active(self):

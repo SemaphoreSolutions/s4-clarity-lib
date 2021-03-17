@@ -156,7 +156,8 @@ class ElementFactory(object):
 
         if xml_node is None:
             return None
-        obj = self.get(xml_node.get("uri"), name=xml_node.get("name"), limsid=xml_node.get("limsid"))
+        obj = self.get(xml_node.get("uri"), name=xml_node.get("name"), limsid=xml_node.get("limsid"),
+            link_node=xml_node)
         return obj
 
     def from_link_nodes(self, xml_nodes):
@@ -201,12 +202,12 @@ class ElementFactory(object):
 
         return matches[0]
 
-    def get(self, uri, force_full_get=False, name=None, limsid=None):
-        # type: (str, bool, str, str) -> ClarityElement
+    def get(self, uri, force_full_get=False, name=None, limsid=None, link_node=None):
+        # type: (str, bool, str, str, ETree.Element) -> ClarityElement
         """
         Returns the cached ClarityElement described by the provide uri. If the
         element does not exist a new cache entry will be created with the provided
-        name and limsid.
+        name, limsid, and link_node.
         If force_full_get is true, and the object is not fully retrieved it will be refreshed.
         """
 
@@ -215,7 +216,7 @@ class ElementFactory(object):
         if uri in self._cache:
             obj = self._cache[uri]
         else:
-            obj = self.element_class(self.lims, uri=uri, name=name, limsid=limsid)
+            obj = self.element_class(self.lims, uri=uri, name=name, limsid=limsid, link_node=link_node)
             self._cache[uri] = obj
 
         if force_full_get and not obj.is_fully_retrieved():

@@ -43,9 +43,6 @@ class Artifact(FieldsMixin, ClarityElement):
     reagent_labels = subnode_element_list(ReagentLabel, ".", "reagent-label", readonly=True)
     parent_process = subnode_link(Process, 'parent-process')
 
-    def __init__(self, lims,  uri=None, xml_root=None, name=None, limsid=None):
-        super(Artifact, self).__init__(lims, uri, xml_root, name, limsid)
-
     @property
     def parent_step(self):
         """:type: Step"""

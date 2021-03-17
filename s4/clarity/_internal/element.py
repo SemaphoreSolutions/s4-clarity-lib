@@ -125,11 +125,12 @@ class ClarityElement(WrappedXml):
 
     UNIVERSAL_TAG = None
 
-    def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None):
+    def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None, link_node=None):
         super(ClarityElement, self).__init__(lims, None)
         self.uri = uri
         self._name = name
         self._limsid = limsid
+        self._link_node = link_node
 
         # use property setter to ensure post-set steps are correctly followed
         self.xml_root = xml_root

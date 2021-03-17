@@ -24,8 +24,8 @@ class File(ClarityElement):
 
     UNIVERSAL_TAG = "{http://genologics.com/ri/file}file"
 
-    def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None):
-        super(File, self).__init__(lims, uri, xml_root, name, limsid)
+    def __init__(self, lims, uri=None, xml_root=None, name=None, limsid=None, link_node=None):
+        super(File, self).__init__(lims, uri, xml_root, name, limsid, link_node)
         self._data = None
         self._dirty = False
         self.content_type = 'text/plain'

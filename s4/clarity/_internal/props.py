@@ -72,7 +72,7 @@ class attribute_property(_clarity_property):
 
     root.demo_attribute == 'demo_value'
     """
-    def __init__(self, property_name, typename=types.STRING, readonly=False):
+    def __init__(self, property_name, typename=types.STRING, readonly=False, may_use_link_node=False):
         """
         :type typename: str
         :param typename: one of s4.clarity.types, default STRING.
@@ -80,12 +80,32 @@ class attribute_property(_clarity_property):
         prop_typename = types.clarity_typename_to_python_typename(typename)
         super(attribute_property, self).__init__(property_name, readonly, prop_typename)
         self.typename = typename
+        self.may_use_link_node = may_use_link_node
 
     def __get__(self, instance, owner):
         """
         :type instance: s4.clarity._internal.element.WrappedXml
         """
-        string_value = instance.xml_root.attrib.get(self.property_name)
+
+        string_value = None
+
+        use_link_node = (
+            self.may_use_link_node and
+            instance._xml_root is None and
+            instance._link_node is not None)
+
+        if use_link_node:
+            # Accessing instance.xml_root may cause an API call, so we try to
+            # get the attribute from instance._link_node if we have it.
+            # (The "link_node" is the bit of XML we get from a list-style API
+            # call, e.g. GET /api/v2/artifacts, whereas the "xml_root" is the full
+            # XML, such as we might get from calling GET /api/v2/artifacts/<id>.)
+            string_value = instance._link_node.attrib.get(self.property_name)
+
+        if string_value is None:
+            # Get the value from xml_root (which may cause an API call)
+            string_value = instance.xml_root.attrib.get(self.property_name)
+
         return types.clarity_string_to_obj(self.typename, string_value)
 
     def __set__(self, instance, value):
