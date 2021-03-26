@@ -7,7 +7,7 @@ from s4.clarity import types
 
 
 class ControlType(ClarityElement):
-    UNIVERSAL_TAG = "{http://genologics.com/ri/controltype}controltype"
+    UNIVERSAL_TAG = "{http://genologics.com/ri/controltype}control-type"
 
     supplier = subnode_property("supplier")
     catalogue_number = subnode_property("catalogue-number")
