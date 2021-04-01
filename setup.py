@@ -45,5 +45,9 @@ setup(
     tests_require=(
         'mock',
         'pytest'
-    )
+    ),
+    project_urls={
+        'Documentation': 'https://readthedocs.org/projects/s4-clarity-lib',
+        'Source': 'https://github.com/SemaphoreSolutions/s4-clarity-lib',
+    }
 )
