@@ -11,6 +11,7 @@ import os
 from . import ETree
 from ._internal.props import subnode_property
 from .exception import FileNotFoundException
+from s4.clarity import types
 
 log = logging.getLogger(__name__)
 
@@ -79,6 +80,7 @@ class File(ClarityElement):
     name = subnode_property('original-location')
     attached_to = subnode_property('attached-to')
     content_location = subnode_property('content-location')
+    is_published = subnode_property('is-published', typename=types.BOOLEAN)
 
     @property
     def is_binary_mode(self):
