@@ -1,5 +1,15 @@
 Release History
 ===============
+1.2.0
+-
+- Fix `ClarityElement.__repr__` to always return a string to avoid exceptions in Python 3.x  
+- Fix incorrect universal tag for ControlType that prevented the creation of Control Types using the library
+- Add is_published property to the File object
+
+1.1.1
+-
+- Remove timeout from wait_for_epp
+
 1.1.0
 -
 - Add suport for Clarity 5 demux endpoint
