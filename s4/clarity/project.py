@@ -4,6 +4,7 @@
 from ._internal import ClarityElement, FieldsMixin
 from s4.clarity._internal.props import subnode_property, subnode_link
 from s4.clarity.researcher import Researcher
+from s4.clarity.file import File
 from s4.clarity import types
 
 
