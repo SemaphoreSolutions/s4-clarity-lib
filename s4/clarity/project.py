@@ -15,3 +15,9 @@ class Project(FieldsMixin, ClarityElement):
     close_date = subnode_property("close-date", types.DATE)
     invoice_date = subnode_property("invoice-date", types.DATE)
     researcher = subnode_link(Researcher, "researcher", attributes=('uri',))  # type: Researcher
+
+    @property
+    def files(self):
+        """:type: list[File]"""
+        return self.lims.files.from_link_nodes(self.xml_findall(File.UNIVERSAL_TAG))
+
