@@ -11,6 +11,7 @@ from s4.clarity import lazy_property
 
 from . import ETree, ClarityException
 from . import types
+from .instrument import Instrument
 from .reagent_lot import ReagentLot
 from .container import Container
 from .iomaps import IOMapsMixin
@@ -415,6 +416,16 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     def _get_iomaps_shared_result_file_type(self):
         return "ResultFile"
 
+    @lazy_property
+    def instrument_used(self):
+        """
+        :type: Instrument
+        """
+        instrument_node = self.xml_find("./instrument")
+        if instrument_node is None:
+            return None
+        return Instrument(lims=self.lims, uri=instrument_node.get("uri"))
+
 
 class StepPools(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}pools"
@@ -732,4 +743,3 @@ class OutputReagent(WrappedXml):
             node = ETree.SubElement(self.xml_root, "reagent-label")
 
         node.set("name", value)
-

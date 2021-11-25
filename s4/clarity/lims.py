@@ -30,12 +30,14 @@ class LIMS(object):
     :param bool dry_run: If true, no destructive requests will be made to the Clarity API. Default false.
     :param bool insecure: Disables SSL validation. Default false.
     :param int timeout: Number of seconds to wait for connections and for reads from the Clarity API. Default None, which is no timeout.
+
     :ivar ElementFactory steps: Factory for :class:`s4.clarity.step.Step`
     :ivar ElementFactory samples: Factory for :class:`s4.clarity.sample.Sample`
     :ivar ElementFactory artifacts: Factory for :class:`s4.clarity.artifact.Artifact`
     :ivar ElementFactory files: Factory for :class:`s4.clarity.file.File`
     :ivar ElementFactory containers: Factory for :class:`s4.clarity.container.Container`
     :ivar ElementFactory projects: Factory for :class:`s4.clarity.project.Project`
+    :ivar ElementFactory instruments: Factory for :class:`s4.clarity.instrument.Instrument`
     :ivar ElementFactory workflows: Factory for :class:`s4.clarity.configuration.workflow.Workflow`
     :ivar ElementFactory protocols: Factory for :class:`s4.clarity.configuration.protocol.Protocol`
     :ivar ElementFactory process_types: Factory for :class:`s4.clarity.configuration.process_type.ProcessType`
@@ -87,6 +89,7 @@ class LIMS(object):
         from .reagent_kit import ReagentKit
         from .reagent_lot import ReagentLot
         from .reagent_type import ReagentType
+        from .instrument import Instrument
         from .researcher import Researcher
         from .role import Role
         from .permission import Permission
@@ -116,6 +119,8 @@ class LIMS(object):
         self.control_types = ElementFactory(self, ControlType)
 
         self.queues = ElementFactory(self, Queue)
+
+        self.instruments = ElementFactory(self, Instrument, batch_flags=BatchFlags.QUERY)
 
         self.reagent_lots = ElementFactory(self, ReagentLot, batch_flags=BatchFlags.QUERY)
 

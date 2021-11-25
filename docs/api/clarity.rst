@@ -111,6 +111,13 @@ File
     :members:
     :show-inheritance:
 
+Instrument
+--------
+
+.. autoclass:: s4.clarity.instrument.Instrument
+    :members:
+    :show-inheritance:
+
 IO Map
 ------
 

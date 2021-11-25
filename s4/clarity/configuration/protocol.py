@@ -124,6 +124,14 @@ class StepConfiguration(ClarityElement):
         return [ControlType(self.lims, p.get("uri")) for p in control_types]
 
     @lazy_property
+    def permitted_instrument_types(self):
+        """
+        :type: List[str]
+        """
+        instrument_type_nodes = self.xml_findall("./permitted-instrument-types/instrument-type")
+        return list({node.text for node in instrument_type_nodes})
+
+    @lazy_property
     def queue(self):
         """
         :type: Queue
