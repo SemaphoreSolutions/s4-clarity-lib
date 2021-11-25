@@ -18,8 +18,9 @@ class Instrument(ClarityElement):
     Consider --
     1. Instrument API endpoint only permits GET
     2. You may configure multiple Instruments to step. However, you can only assign 1 Instrument per step
-    3. If Instrument is configured to step, Step UDFs CAN NOT be set via the API, until the Instrument field is set via UX/UI
-    4. Instruments are not part of the ETL that supports Illumina’s Reporting Module
+    3. If Instrument is configured to step, Step UDFs CAN NOT be set via the API,
+        until the Instrument field is set via UX/UI
+    4. Instruments are not part of the ETL that supports the Illumina Reporting Module
     """
 
     UNIVERSAL_TAG = "{http://genologics.com/ri/instrument}instrument"
