@@ -6,24 +6,36 @@ from s4.clarity.step import Step, StepDetails
 
 from s4.clarity.test.generic_testcases import LimsTestCase
 
+from datetime import date  # typing
 from s4.clarity.utils.date_util import str_to_date
 
 
 class TestInstrument(LimsTestCase):
 
     def test_instrument_assignment_on_step_details(self):
+        """
+        Test for Instrument set in the 'Instrument Field' value during the Step Details phase
+        """
 
-        step = self.element_from_xml(Step, STEP_XML)
-        step_details = self.element_from_xml(StepDetails, PRE_INSTRUMENT_SET_STEP_DETAILS_XML, step=step)
+        # Parse the xml into a StepDetails object
+        step = self.element_from_xml(Step, STEP_XML)  # type: Step
+
+        # pre instrument used field set
+        step_details = self.element_from_xml(StepDetails, PRE_INSTRUMENT_SET_STEP_DETAILS_XML, step=step)  # type: StepDetails
         self.assertIsNone(step_details.instrument_used)
 
+        # post instrument used field set
         step_details = self.element_from_xml(StepDetails, POST_INSTRUMENT_SET_STEP_DETAILS_XML, step=step)
         self.assertIsInstance(step_details.instrument_used, Instrument)
 
     def test_instrument_object_properties(self):
+        """
+        Test for Instrument object instantiation (Clarity Element inherits WrappedXml class)
+        Point of Interest: Instrument API endpoint only permits GET
+        """
 
-        # Parse the xml into a StepDetails object
-        instrument = self.element_from_xml(Instrument, INSTRUMENT_XML)
+        # Parse the xml into an Instrument object
+        instrument = self.element_from_xml(Instrument, INSTRUMENT_XML)  # type: Instrument
 
         self.assertEqual(instrument.name, "instrument_2")
         self.assertEqual(instrument.limsid, "4")
@@ -32,7 +44,7 @@ class TestInstrument(LimsTestCase):
         self.assertEqual(instrument.archived, False)
 
         clarity_date_time_str = "2021-12-06"
-        expected_date = str_to_date(clarity_date_time_str)
+        expected_date = str_to_date(clarity_date_time_str)  # type: date
 
         self.assertEqual(instrument.expiry_date, expected_date)
 
