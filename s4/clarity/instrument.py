@@ -36,7 +36,6 @@ class Instrument(ClarityElement):
         """
         :return: List of instruments of the same instrument type
         :type: List[Instrument]
-        Note: Clarity 5.2+ does NOT permit duplicate instrument type entries via UX/UI
         """
         instruments = self.lims.instruments.all()
         return [instrument for instrument in instruments
