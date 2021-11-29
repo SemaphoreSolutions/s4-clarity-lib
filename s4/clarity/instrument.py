@@ -9,9 +9,9 @@ from s4.clarity import types, lazy_property
 class Instrument(ClarityElement):
     """
     Reference: https://d10e8rzir0haj8.cloudfront.net/5.3/rest.version.instruments.html
-    Note: xml root limsid attribute e.g. "55-6" does not have use in API.
-        Instead, use uri id for Instrument object limsid
+    Note: See example xml_root below --
         <inst:instrument xmlns:inst="http://genologics.com/ri/instrument" limsid="55-6" uri="https://clarityhost/api/v2/instruments/6">
+        We use uri id for Instrument object limsid i.e. "6" instead of "55-6"
 
     Cautionary Notes:
     In most cases, a Step UDF or Reagent Kit/Reagent Lot is a better option to track instrument use in the LIMS.

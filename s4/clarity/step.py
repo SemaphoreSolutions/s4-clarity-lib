@@ -376,6 +376,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     :ivar str|None uri:
     :ivar LIMS lims:
     """
+
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}details"
     FIELDS_XPATH = "./fields"
     ATTACH_TO_CATEGORY = "ProcessType"
@@ -383,6 +384,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "type"
 
     name = subnode_property("configuration", readonly=True)
+    instrument_used = subnode_link(Instrument, "instrument", readonly=True, attributes=('uri',))
 
     def __init__(self, step, *args, **kwargs):
         self.step = step
@@ -415,16 +417,6 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
 
     def _get_iomaps_shared_result_file_type(self):
         return "ResultFile"
-
-    @lazy_property
-    def instrument_used(self):
-        """
-        :type: Instrument
-        """
-        instrument_node = self.xml_find("./instrument")
-        if instrument_node is None:
-            return None
-        return Instrument(lims=self.lims, uri=instrument_node.get("uri"))
 
 
 class StepPools(ClarityElement):
