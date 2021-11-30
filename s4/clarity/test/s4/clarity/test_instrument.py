@@ -26,7 +26,7 @@ class TestInstrument(LimsTestCase):
 
         # post instrument used field set
         step_details = self.element_from_xml(StepDetails, POST_INSTRUMENT_SET_STEP_DETAILS_XML, step=step)
-        self.assertIsInstance(step_details.instrument_used, Instrument)
+        self.assertIsNotNone(step_details.instrument_used)
 
     def test_instrument_object_properties(self):
         """
