@@ -619,14 +619,15 @@ class StepReagentLots(ClarityElement):
 class StepProgramStatus(ClarityElement):
     """
     Manage the status of the currently executing step. By setting a
-    message to the step status a message box will be displayed to
-    the user at the end of the step.
-
-    This will only work in the End of Step EPP script. Calling it
-    from any other event hook will be rejected by Clarity.
+    message to the step status, a message box will be displayed to
+    the user.
 
     The AI node will set the status to RUNNING, but this is not
     allow the API to set this value.
+
+    NOTE: Upon message box display, a user has to action Step transition,
+    i.e. no endpoint to get past the message box. In practise, using this endpoint
+    has worked against developing automated workflow tests, via StepRunner
     """
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}program-status"
 
@@ -732,4 +733,3 @@ class OutputReagent(WrappedXml):
             node = ETree.SubElement(self.xml_root, "reagent-label")
 
         node.set("name", value)
-
