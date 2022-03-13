@@ -622,12 +622,12 @@ class StepProgramStatus(ClarityElement):
     message to the step status, a message box will be displayed to
     the user.
 
-    The AI node will set the status to RUNNING, but this is not
+    The AI node will set the status to RUNNING, but does not
     allow the API to set this value.
 
-    NOTE: Upon message box display, a user has to action Step transition,
-    i.e. no endpoint to get past the message box. In practise, using this endpoint
-    has worked against developing automated workflow tests, via StepRunner
+    NOTE: A user has to action Step transition, upon message box display.
+    i.e. There is no API request to get past the message box.
+    In practise, using the 'program-status' endpoint conflicts with using StepRunner to develop automated workflow tests
     """
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}program-status"
 
