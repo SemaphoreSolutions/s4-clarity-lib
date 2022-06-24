@@ -1,5 +1,17 @@
 Release History
 ===============
+1.3.0
+-
+- (#25) Added support for the [Clarity Instruments API endpoint](https://d10e8rzir0haj8.cloudfront.net/5.3/rest.version.instruments.html):
+   - Added a new `Instrument` class
+   - Updated `StepConfiguration` (in `configuration.protcol`) and `StepDetails` (in `step`) to retrieve `instrument` related xml subnodes
+- (#24) Add a `files` property to the `Project` class
+- (#30) Fixed `workflow.enqueue()` setting `stage-uri` in generated XML if `stage` appears in the domain name
+- (#28) Removed dependency on `typing` for Python versions 3.5 and up
+- Updated documentation:
+   - (#27) The `StepProgramStatus` class documentation now more accurately reflects usage
+   - (#29) The documentation of the `Stage` class has corrected to show that the `step` property returns a `StepConfiguration` object
+
 1.2.0
 -
 - Fix `ClarityElement.__repr__` to always return a string to avoid exceptions in Python 3.x  
