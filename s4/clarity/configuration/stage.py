@@ -27,7 +27,7 @@ class Stage(ClarityElement):
     @lazy_property
     def step(self):
         """
-        :type: Step
+        :type: StepConfiguration
         """
         step_node = self.xml_find("step")
         if step_node is not None:
