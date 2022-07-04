@@ -98,7 +98,7 @@ class Router(object):
         """
         Generates a ElementTree.SubElement according to the action (assign / unassign) and the workflow/stage uri
         """
-        if '/stage/' in workflow_or_stage_uri:
+        if '/stages/' in workflow_or_stage_uri:
             assign_node = ETree.SubElement(routing_node, action, {'stage-uri': workflow_or_stage_uri})
         else:
             assign_node = ETree.SubElement(routing_node, action, {'workflow-uri': workflow_or_stage_uri})
