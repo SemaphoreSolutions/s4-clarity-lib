@@ -1,5 +1,9 @@
 Release History
 ===============
+1.3.1
+-
+- Fixed regression in 1.3.0 which caused all stage-based routing to fail
+
 1.3.0
 -
 - (#25) Added support for the [Clarity Instruments API endpoint](https://d10e8rzir0haj8.cloudfront.net/5.3/rest.version.instruments.html):
