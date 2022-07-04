@@ -40,8 +40,11 @@ class FakeFactory:
         self.instances = {}
 
     def from_link_node(self, linknode):
-        uri = linknode.get("uri")
 
+        if linknode is None:
+            return None
+
+        uri = linknode.get("uri")
         if uri in self.instances:
             return self.instances[uri]
 

@@ -11,6 +11,7 @@ from s4.clarity import lazy_property
 
 from . import ETree, ClarityException
 from . import types
+from .instrument import Instrument
 from .reagent_lot import ReagentLot
 from .container import Container
 from .iomaps import IOMapsMixin
@@ -375,6 +376,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     :ivar str|None uri:
     :ivar LIMS lims:
     """
+
     UNIVERSAL_TAG = "{http://genologics.com/ri/step}details"
     FIELDS_XPATH = "./fields"
     ATTACH_TO_CATEGORY = "ProcessType"
@@ -382,6 +384,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "type"
 
     name = subnode_property("configuration", readonly=True)
+    instrument_used = subnode_link(Instrument, "instrument", readonly=True, attributes=('uri',))
 
     def __init__(self, step, *args, **kwargs):
         self.step = step
@@ -732,4 +735,3 @@ class OutputReagent(WrappedXml):
             node = ETree.SubElement(self.xml_root, "reagent-label")
 
         node.set("name", value)
-
