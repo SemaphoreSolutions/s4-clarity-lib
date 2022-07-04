@@ -180,7 +180,7 @@ class subnode_link(_clarity_property):
     root.sample == <Sample limsid='1234'>
     """
 
-    def __init__(self, element_type, property_name, readonly=False, attributes=('limsid','uri')):
+    def __init__(self, element_type, property_name, readonly=False, attributes=('limsid', 'uri')):
         """
         :type element_type: Type[s4.clarity._internal.element.ClarityElement]
         :type property_name: str
