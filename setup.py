@@ -40,7 +40,7 @@ setup(
         'python-dateutil',
         'six',
         'future',
-        'typing'
+        "typing; python_version < '3.5'"
     ),
     tests_require=(
         'mock',
