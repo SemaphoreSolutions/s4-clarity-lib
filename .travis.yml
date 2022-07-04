@@ -8,6 +8,9 @@ python:
     - '3.8'
     - '3.9'
 
+before_install:
+  - if [[ $TRAVIS_PYTHON_VERSION == 3.7 ]]; then pip install -U importlib_metadata ; fi  # workaround
+
 install:
     - pip install --upgrade -r requirements.txt     # py3.5 fails due to old pytest
 
