@@ -144,7 +144,7 @@ class GenericScript(object):
                     level_name_dict = logging._levelNames
                 msg = "%r is not a valid log level: use one of %s" % (
                     string,
-                    list(filter(lambda k: type(k) == str, level_name_dict.keys()))
+                    list(filter(lambda k: type(k) == str, list(level_name_dict)))
                 )
                 raise argparse.ArgumentTypeError(msg)
 

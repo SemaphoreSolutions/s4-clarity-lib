@@ -18,7 +18,7 @@ class Queue(ClarityElement):
     def query(self, prefetch=True, **params):
         queued_elements = []
 
-        for k in params.keys():
+        for k in params:
             if "_" in k:
                 new_k = k.replace("_", "-")
                 params[new_k] = params[k]

@@ -6,7 +6,10 @@ import logging
 import inspect
 from six import string_types
 from abc import ABCMeta, abstractmethod
-from collections import MutableSequence, MutableMapping
+try:
+    from collections.abc import MutableSequence, MutableMapping
+except ImportError:
+    from collections import MutableSequence, MutableMapping
 
 from s4.clarity import types
 

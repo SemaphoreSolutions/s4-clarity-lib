@@ -65,7 +65,7 @@ class TestContainer(LimsTestCase):
         self.assertEqual(container.occupied_wells, 22)
         self.assertEqual(container.state, "Populated")
         self.assertEqual(container.type_name, "48 well plate")
-        self.assertEqual(len(container.placements.keys()), 22)
+        self.assertEqual(len(list(container.placements)), 22)
         self.assertEqual(container.placements["E:2"].limsid, "2-7628")
         self.assertEqual(container.placements["C:1"].limsid, "2-7620")
 

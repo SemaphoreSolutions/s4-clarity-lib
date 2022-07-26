@@ -105,8 +105,8 @@ def _get_udfs_from_ancestors_internal(lims, current_artifacts_to_original_artifa
     get filled in over the recursive calls of this method.
     :rtype: dict[s4.clarity.Artifact, dict[str, Any]]
     """
-    current_artifacts = current_artifacts_to_original_artifacts.keys()
-    current_artifacts_to_parent_artifacts = get_parent_artifacts(lims, current_artifacts_to_original_artifacts.keys())
+    current_artifacts = list(current_artifacts_to_original_artifacts)
+    current_artifacts_to_parent_artifacts = get_parent_artifacts(lims, list(current_artifacts_to_original_artifacts))
 
     # Initialize the 'next to search' dict
     next_search_artifacts_to_original_artifacts = defaultdict(list)

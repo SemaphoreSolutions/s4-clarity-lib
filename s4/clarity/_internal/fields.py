@@ -5,8 +5,12 @@ import collections
 from six import string_types
 from . import ClarityElement
 from s4.clarity import ETree, types
-from .lazy_property import  lazy_property
+from .lazy_property import lazy_property
 from s4.clarity.types import obj_to_clarity_string, clarity_string_to_obj
+try:
+    from collections.abc import MutableMapping
+except ImportError:
+    from collections import MutableMapping
 
 FIELD_TAG = "{http://genologics.com/ri/userdefined}field"
 
@@ -160,7 +164,7 @@ class FieldsMixin(ClarityElement):
                     subnode.text = subnode.text.replace(',', '.')
 
 
-class FieldsDict(collections.MutableMapping):
+class FieldsDict(MutableMapping):
     """
     :type _real_dict: dict[str, ETree.Element]
     :type _root_node: ETree.Element

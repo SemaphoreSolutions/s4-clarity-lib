@@ -63,7 +63,7 @@ class TriggeredStepEPP(StepEPP):
     def add_arguments(cls, argparser):
         super(TriggeredStepEPP, cls).add_arguments(argparser)
         cls.add_triggered_step_actions()
-        argparser.add_argument("-a", "--action", choices=cls.triggered_step_actions.keys(), required=True)
+        argparser.add_argument("-a", "--action", choices=list(cls.triggered_step_actions), required=True)
 
     def run(self):
         log.info("Handling Action '%s'" % self.options.action)

@@ -1,6 +1,9 @@
 import string
-from collections import MutableSet
 
+try:
+    from collections.abc import MutableSet
+except ImportError:
+    from collections import MutableSet
 from s4.clarity import types, ETree
 from s4.clarity._internal import WrappedXml
 from s4.clarity._internal.props import attribute_property, subnode_property, subnode_link, subnode_links, subnode_element, subnode_property_literal_dict, subnode_property_dict, subnode_element_list

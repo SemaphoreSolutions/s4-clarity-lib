@@ -130,10 +130,10 @@ class TestIomaps(LimsTestCase):
         self.assertEqual(self.artifact_dict_to_limsids_dict(details.iomaps_output_keyed()), expected_output_map)
 
         # Verify that the input and output names match and there are no extra or missing names
-        input_names = expected_input_map.keys()
+        input_names = list(expected_input_map)
         self._verify_names(details.inputs, input_names)
 
-        output_names = expected_output_map.keys()
+        output_names = list(expected_output_map)
         self._verify_names(details.outputs, output_names)
 
         # Check that the iomaps look like we expect them too
