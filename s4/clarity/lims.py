@@ -173,10 +173,10 @@ class LIMS(object):
             s = FakeSession()
         else:
             s = requests.Session()
-            if self._insecure:
-                log.warning("WARNING - This machine is not validating SSL certificates. DO NOT ENABLE IN PRODUCTION.")
-                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-                s.verify = False
+        if self._insecure:
+            log.warning("WARNING - This machine is not validating SSL certificates. DO NOT ENABLE IN PRODUCTION.")
+            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+            s.verify = False
 
         s.auth = (self.username, self.password)
         return s
