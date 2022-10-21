@@ -69,8 +69,8 @@ class IOMapsMixin(ClarityElement):
                            self.input_keyed_lookup.items()]
 
         # Prepare our artifact lists
-        self.inputs = list(self.input_keyed_lookup.keys())
-        self.outputs = list(self.output_keyed_lookup.keys())
+        self.inputs = list(self.input_keyed_lookup)
+        self.outputs = list(self.output_keyed_lookup)
         self.shared_outputs = list(shared_output_set)
 
     def _get_iomaps_shared_result_file_type(self):

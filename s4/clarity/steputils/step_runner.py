@@ -362,7 +362,7 @@ class StepRunner:
             def filterfunc(aa):
                 return (aa.action == "nextstep" and aa.step_uri == self.step_config.uri) or aa.action == "complete"
 
-        return [aa.artifact_uri for aa in filter(filterfunc, artifact_actions.values())]
+        return [aa.artifact_uri for aa in filter(filterfunc, list(artifact_actions.values()))]
 
     def get_started_step(self, previous_step, project_name):
         return previous_step.automatic_next_step.limsid
