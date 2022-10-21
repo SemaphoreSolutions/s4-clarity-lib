@@ -1,8 +1,13 @@
 Release History
 ===============
+1.4.0
+- 
+- (#34) Now fully compatible with Python 3.10.
+- (#35) The `insecure` and `dry-run` parameters may now be used together when creating a LIMS object.
+
 1.3.1
 -
-- Fixed regression in 1.3.0 which caused all stage-based routing to fail
+- (#33) Fixed regression in 1.3.0 which caused all stage-based routing to fail
 
 1.3.0
 -
