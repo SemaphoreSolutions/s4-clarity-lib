@@ -10,7 +10,7 @@ class ReagentKit(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/reagentkit}reagent-kit"
 
     name = subnode_property("name")
-    supplier = subnode_property("lot-supplier")
+    supplier = subnode_property("supplier")
     catalogue_number = subnode_property("catalogue-number")
     website = subnode_property("website", types.URI)
     archived = subnode_property("archived", types.BOOLEAN)
