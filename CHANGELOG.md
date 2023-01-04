@@ -1,5 +1,9 @@
 Release History
 ===============
+1.4.1
+-
+- (#40) Fixed a typo that prevented the `supplier` property from being set on an instance of `ReagentKit`.
+
 1.4.0
 - 
 - (#34) Now fully compatible with Python 3.10.
