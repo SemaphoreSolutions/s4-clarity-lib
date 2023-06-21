@@ -318,7 +318,7 @@ class StepRunner:
         )
 
         for index, output in enumerate(self.step.details.outputs):
-            self.step.placements.create_placement(output, new_containers[index], container_type.row_order_wells()[0])
+            self.step.placements.create_placement(output, new_containers[index], container_type.row_major_order_wells()[0])
 
         self.step.placements.post_and_parse()
         self.step.refresh()
