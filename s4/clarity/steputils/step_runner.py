@@ -18,6 +18,7 @@ CONTAINER_TYPE_TUBE = "Tube"
 PLACEMENT_STATE = "Placement"
 ARRANGING_STATE = "Arranging"
 STARTED_STATE = "Started"
+SETUP_STATE = "Step Setup"
 POOLING_STATE = "Pooling"
 ADD_REAGENT_STATE = "Add Reagent"
 RECORD_DETAILS_STATE = "Record Details"
@@ -27,6 +28,7 @@ COMPLETED_STATE = "Completed"
 ALL_STEP_STATES = [PLACEMENT_STATE,
                    ARRANGING_STATE,
                    STARTED_STATE,
+                   SETUP_STATE,
                    POOLING_STATE,
                    ADD_REAGENT_STATE,
                    RECORD_DETAILS_STATE,
@@ -93,6 +95,10 @@ class StepRunner:
         # Override to generate a custom number of replicates for each sample.
         return 1
 
+    def setup(self):
+        # Override this method to implement actions on the step setup screen.
+        pass
+
     def placement(self):
         # Override this method to implement actions on the placement screen.
         pass
@@ -121,38 +127,44 @@ class StepRunner:
     # End Virtual Methods
     ################################
 
+    def _run_setup(self):
+        # Runs the Step Setup phase
+        log.info("Starting Step Setup Phase")
+        self.setup()
+        self.step.advance()
+
     def _run_placement(self):
-        # Runs the placement step
+        # Runs the placement phase
         log.info("Starting Placement Phase")
         self.placement()
         self.step.advance()
 
     def _run_arranging(self):
-        # Runs the Arranging step
+        # Runs the Arranging phase
         log.info("Starting Arranging Phase")
         self.arranging()
         # Note: Most versions of Clarity do not support advancing from the Arranging state.
 
     def _run_pooling(self):
-        # Runs the Pooling step
+        # Runs the Pooling phase
         log.info("Starting Pooling Phase")
         self.pooling()
         self.step.advance()
 
     def _run_add_reagent(self):
-        # Runs the Add Reagent step
+        # Runs the Add Reagent phase
         log.info("Starting Add Reagent Phase")
         self.add_reagents_step()
         self.step.advance()
 
     def _run_record_details(self):
-        # Runs the Record Details step
+        # Runs the Record Details phase
         log.info("Starting Record Details Phase")
         self.record_details()
         self.step.advance()
 
     def _run_next_steps(self):
-        # Runs the Assign Next Steps step
+        # Runs the Assign Next Steps phase
         log.info("Starting Assign Next Steps Phase")
         self.next_steps()
         self.step.advance()
@@ -263,6 +275,7 @@ class StepRunner:
             PLACEMENT_STATE: self._run_placement,
             ARRANGING_STATE: self._run_arranging,
             STARTED_STATE: self._wait_on_started,
+            SETUP_STATE: self._run_setup,
             POOLING_STATE: self._run_pooling,
             ADD_REAGENT_STATE: self._run_add_reagent,
             RECORD_DETAILS_STATE: self._run_record_details,

@@ -1,5 +1,8 @@
 Release History
 ===============
+1.5.0
+- (#43) Added Step Setup state to Step Runner.
+
 1.4.2
 -
 - Migrated CI/CD from Travis-CI to GitHub Actions.
