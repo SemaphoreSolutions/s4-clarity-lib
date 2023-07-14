@@ -124,6 +124,25 @@ class StepConfiguration(ClarityElement):
         return [ControlType(self.lims, p.get("uri")) for p in control_types]
 
     @lazy_property
+    def permitted_containers(self):
+        """
+        :type: ContainerType
+        """
+        container_types = self.xml_findall("./permitted-containers/container-type")
+        
+        # container-type (type generic-type-link) has no uri attribute. find the container by name
+        # beware if your lims has multiple containers with the same name
+
+        ret = self.lims.query(name=[c.name for c in container_types])
+
+        if len(names) != len(ret): # can len(names) > len(ret)?
+            import warnings
+            warnings.warn("The number of container types found differs from the number specified in the step config. \
+                          Do multiple container types share the same name?")
+        
+        return ret    
+    
+    @lazy_property
     def permitted_instrument_types(self):
         """
         :type: List[str]
