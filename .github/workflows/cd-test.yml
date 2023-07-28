@@ -1,0 +1,34 @@
+name: CD
+
+on:
+  push:
+    branches:
+      - github_actions
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    environment:
+      name: testpypi
+      url: https://test.pypi.org/p/s4-clarity
+
+    permissions:
+      id-token: write  # IMPORTANT: this permission is mandatory for trusted publishing
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Build s4-clarity-lib
+        run: |
+          pip install --upgrade -r requirements.txt
+      - name: Publish package distributions to TestPyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          repository-url: https://test.pypi.org/legacy/
+          verbose: true

@@ -3,7 +3,7 @@ name: CI
 on: [push, pull_request]
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-20.04  # last version that can run Python 3.6
     strategy:
       matrix:
@@ -30,7 +30,7 @@ jobs:
   # Use a container to run Python 2 (host OS doesn't matter)
   # required because the setup-python action dropped support for python 2
   # Don't bother with coveralls or pypi here, just run the tests
-  build-python2:
+  test-python2:
     runs-on: ubuntu-latest
     container: python:2.7.18-buster
 
