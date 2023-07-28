@@ -4,7 +4,7 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-20.04  # last version that can run Python 3.6
     strategy:
       matrix:
         python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
@@ -26,3 +26,18 @@ jobs:
           pytest --cov=s4
       - name: Coveralls
         uses: coverallsapp/github-action@v2
+
+  build-python2:
+    runs-on: ubuntu-latest  # host OS doesn't matter as we are running py2 in a container
+    container: python:2.7.18-buster
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Before tests (same as "before_install")
+        run: |
+          pip install --upgrade -r requirements.txt
+      - name: Run test suite (same as "script")
+        run: |
+          pytest --cov=s4
