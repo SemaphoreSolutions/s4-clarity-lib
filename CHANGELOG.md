@@ -1,5 +1,10 @@
 Release History
 ===============
+1.4.2
+-
+- Migrated CI/CD from Travis-CI to GitHub Actions.
+- No code changes since 1.4.1, just pushing a release to verify that we can still deploy to PyPi!
+
 1.4.1
 -
 - (#40) Fixed a typo that prevented the `supplier` property from being set on an instance of `ReagentKit`.
