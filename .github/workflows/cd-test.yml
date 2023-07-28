@@ -22,7 +22,6 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Build s4-clarity-lib
         run: |
-          pip install --upgrade -r requirements.txt
           pip install wheel
           python setup.py sdist bdist_wheel
       - name: Publish package distributions to TestPyPI
