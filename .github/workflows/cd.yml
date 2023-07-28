@@ -1,0 +1,28 @@
+name: Publish to PyPi
+
+on:
+  push:
+    tags:
+      - '*'
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python 3.11
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.11
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Build s4-clarity-lib
+        run: |
+          pip install wheel
+          python setup.py sdist bdist_wheel
+      - name: Publish package distributions to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1

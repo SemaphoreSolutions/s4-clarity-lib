@@ -21,9 +21,9 @@ The test suite can then be run in multiple Python versions as follows:
 By default, Tox looks for `tox.ini` in the current directory, and uses it to determine
 which Python versions to use, which requirements to install, how to run the tests, etc.
 
-### Testing using Travis CI
+### Testing using GitHub Actions
 
-See `.travis.yml`.
+See `.github/workflows/ci.yml`.
 
-Travis CI is set up on the official Github repo (https://github.com/SemaphoreSolutions/s4-clarity-lib).
-It runs automatically on every pull request.
+GitHub Actions are set up on the official Github repo (https://github.com/SemaphoreSolutions/s4-clarity-lib).
+They runs automatically on every pull request.

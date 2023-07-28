@@ -1,0 +1,46 @@
+name: Run Unit Tests
+
+on: [push, pull_request]
+
+jobs:
+  test:
+    runs-on: ubuntu-20.04  # last version that can run Python 3.6
+    strategy:
+      matrix:
+        python-version: ['3.6', '3.7', '3.8', '3.9', '3.10', '3.11']
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: ${{ matrix.python-version }}
+          architecture: x64
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Before tests (same as "before_install")
+        run: |
+          pip install --upgrade -r requirements.txt
+      - name: Run test suite (same as "script")
+        run: |
+          pytest --cov=s4
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
+
+  # Use a container to run Python 2 (host OS doesn't matter)
+  # required because the setup-python action dropped support for python 2
+  # Don't bother with coveralls or pypi here, just run the tests
+  test-python2:
+    runs-on: ubuntu-latest
+    container: python:2.7.18-buster
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Display Python version
+        run: python -c "import sys; print(sys.version)"
+      - name: Before tests (same as "before_install")
+        run: |
+          pip install --upgrade -r requirements.txt
+      - name: Run test suite (same as "script")
+        run: |
+          pytest --cov=s4
