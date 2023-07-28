@@ -1,9 +1,9 @@
-name: Publish to TestPyPi
+name: Publish to PyPi
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 
 jobs:
   build_and_deploy:
@@ -24,7 +24,5 @@ jobs:
         run: |
           pip install wheel
           python setup.py sdist bdist_wheel
-      - name: Publish package distributions to TestPyPI
+      - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
-        with:
-          repository-url: https://test.pypi.org/legacy/
