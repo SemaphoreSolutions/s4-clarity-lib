@@ -24,6 +24,5 @@ jobs:
       - name: Run test suite (same as "script")
         run: |
           pytest --cov=s4
-      - name: Finalization (same as "after_success")
-        run: |
-          coveralls
+      - name: Coveralls
+        uses: coverallsapp/github-action@v2
