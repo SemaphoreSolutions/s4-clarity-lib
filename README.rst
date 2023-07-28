@@ -4,8 +4,8 @@ S4-Clarity Library
 ==================
 
 
-.. image:: https://travis-ci.com/SemaphoreSolutions/s4-clarity-lib.svg?branch=master
-    :target: https://travis-ci.com/SemaphoreSolutions/s4-clarity-lib
+.. image:: https://github.com/SemaphoreSolutions/s4-clarity-lib/actions/workflows/ci.yml/badge.svg?branch=master
+    :target: https://github.com/SemaphoreSolutions/s4-clarity-lib/actions
 
 
 Used in numerous labs around the world, the S4-Clarity library provides an easy-to-use integration with the BaseSpace Clarity LIMS API. The package includes:

@@ -27,8 +27,11 @@ jobs:
       - name: Coveralls
         uses: coverallsapp/github-action@v2
 
+  # Use a container to run Python 2 (host OS doesn't matter)
+  # required because the setup-python action dropped support for python 2
+  # Don't bother with coveralls or pypi here, just run the tests
   build-python2:
-    runs-on: ubuntu-latest  # host OS doesn't matter as we are running py2 in a container
+    runs-on: ubuntu-latest
     container: python:2.7.18-buster
 
     steps:
