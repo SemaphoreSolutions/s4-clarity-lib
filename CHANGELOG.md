@@ -1,5 +1,9 @@
 Release History
 ===============
+1.5.0
+- Refactoring to a src based deployment scheme
+- 
+
 1.4.2
 -
 - Migrated CI/CD from Travis-CI to GitHub Actions.

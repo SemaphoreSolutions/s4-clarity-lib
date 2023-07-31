@@ -7,7 +7,7 @@ from setuptools import setup, find_packages
 setup_dir = os.path.abspath(os.path.dirname(__file__))
 
 version = {}
-with open(os.path.join(setup_dir, 's4', 'clarity', 'version.py'), 'r') as f:
+with open(os.path.join(setup_dir, 'src', 's4', 'clarity', 'version.py'), 'r') as f:
     exec(f.read(), version)
 
 
@@ -23,7 +23,8 @@ setup(
     description='A general purpose library for interacting with Clarity LIMS',
     long_description=long_description,
     long_description_content_type='text/x-rst',
-    packages=find_packages(exclude=['*.test', '*.test.*', 'test.*', 'test']),
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
     python_requires='>=2.7',
     classifiers=[
         'License :: OSI Approved :: MIT License',

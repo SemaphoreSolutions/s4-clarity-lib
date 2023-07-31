@@ -4,7 +4,7 @@
 # Setuptools distribution and build folders.
 /dist
 /build
-/*.egg-info
+*.egg-info
 /.eggs
 
 # PyCharm
@@ -22,5 +22,6 @@
 
 *.class
 .cache/
+.pytest_cache/
 
 docs/_build
