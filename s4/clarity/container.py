@@ -14,7 +14,7 @@ class ContainerDimension(WrappedXml):
     @lazy_property
     def dimension_range(self):
         """
-        List of the labels for the given dimension (row or column)
+        List of the labels for the given dimension
 
         :return: list[int]|list[str]
         """
@@ -42,6 +42,10 @@ class ContainerDimension(WrappedXml):
 
 
 class ContainerType(ClarityElement):
+    """
+    A class to handle container types, with helper functions to create and encode well positions
+    For the purposes of this class, the y-dimension is considered the columns, and the x-dimension is considered the rows.
+    """
     UNIVERSAL_TAG = "{http://genologics.com/ri/containertype}container-type"
 
     is_tube = subnode_property("is-tube", types.BOOLEAN)  # type: bool
@@ -80,10 +84,12 @@ class ContainerType(ClarityElement):
         """
         return "%s:%s" % (self.y_dimension.as_label(rc[0]), self.x_dimension.as_label(rc[1]))
 
-    def row_order_wells(self):
+    def row_major_order_wells(self):
         """
-        Wells in row order, e.g., A:1, B:1, ...
-        Unavailable wells are omitted
+        Returns wells in the container type in row major order.
+        This will return the wells ordered: ["y1:x1", "y1:x2", "y1:x3", [...], "y1,xn", "y2:x1", "y2:x2", [...]]
+
+        Unavailable wells are omitted.
 
         :rtype: list[str]
         """
@@ -96,10 +102,12 @@ class ContainerType(ClarityElement):
                     l.append(well_name)
         return l
 
-    def column_order_wells(self):
+    def column_major_order_wells(self):
         """
-        Wells in column order, e.g., A:1, A:2, ...
-        Unavailable wells are omitted
+        Returns wells in the container type in column major order.
+        This will return the wells ordered: ["y1:x1", "y2:x1", "y3:x1", [...], "yn:x1", "y1:x2", "y2:x2", [...]]
+
+        Unavailable wells are omitted.
 
         :rtype: list[str]
         """
@@ -126,6 +134,18 @@ class ContainerType(ClarityElement):
         :type: int
         """
         return len(self.x_dimension.dimension_range) * len(self.y_dimension.dimension_range) - len(self.unavailable_wells)
+
+    def row_order_wells(self):
+        """
+        :deprecated: use :class:`ContainerType.row_major_order_wells()` instead.
+        """
+        return self.row_major_order_wells()
+
+    def column_order_wells(self):
+        """
+        :deprecated: use :class:`ContainerType.column_major_order_wells()` instead.
+        """
+        return self.column_major_order_wells()
 
     def x_dimension_range(self):
         """

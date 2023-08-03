@@ -85,9 +85,9 @@ def auto_place_artifacts(step, artifacts, order=ROW_ORDER):
     containers = step.placements.selected_containers
     for container in containers:
         if order == ROW_ORDER:
-            wells = container.container_type.row_order_wells()
+            wells = container.container_type.row_major_order_wells()
         elif order == COLUMN_ORDER:
-            wells = container.container_type.column_order_wells()
+            wells = container.container_type.column_major_order_wells()
         else:
             raise Exception("Auto Place Error - Unrecognized order type '%s'" % order)
 
