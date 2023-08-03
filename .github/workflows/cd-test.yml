@@ -2,8 +2,8 @@ name: Publish to TestPyPi
 
 on:
   push:
-    branches:
-      - master
+    tags:
+      - '*'
 
 jobs:
   build_and_deploy:
