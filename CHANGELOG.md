@@ -2,8 +2,9 @@ Release History
 ===============
 1.5.0
 -
-- (#43) Added Step Setup state to Step Runner.
-- (#42) Improved Documentation, testing and function naming around container types and well ordering
+- (#45) Added the `permitted_containers` property to `StepConfiguration`.
+- (#43) Added support for the Step Setup state to `StepRunner`.
+- (#42) Improved Documentation, testing and function naming around container types and well ordering.
 
 1.4.2
 -

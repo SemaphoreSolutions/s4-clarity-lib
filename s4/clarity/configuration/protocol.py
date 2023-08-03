@@ -1,11 +1,15 @@
 # Copyright 2016 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 
+import logging
+
 from s4.clarity._internal.element import ClarityElement, WrappedXml
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
 from s4.clarity._internal.props import subnode_property_list_of_dicts, subnode_property, subnode_property_literal_dict, attribute_property, subnode_element_list
 from s4.clarity import types, lazy_property
+
+log = logging.getLogger(__name__)
 
 
 class Protocol(ClarityElement):
@@ -129,17 +133,19 @@ class StepConfiguration(ClarityElement):
         :type: ContainerType
         """
         container_types = self.xml_findall("./permitted-containers/container-type")
-        
+
         # container-type (type generic-type-link) has no uri attribute. find the container by name
         # beware if your lims has multiple containers with the same name
 
         ret = self.lims.container_types.query(name=[c.text for c in container_types])
 
-        if len(container_types) != len(ret): # can len(types) > len(ret)?
-            import warnings
-            warnings.warn("The number of container types found differs from the number specified in the step config. \
-                          Do multiple container types share the same name?")
-        
+        if len(container_types) != len(ret):  # can len(types) > len(ret)?
+            log.warning(
+                "The number of container types found differs from the number "
+                "specified in the step config. Do multiple container types "
+                "share the same name?"
+            )
+
         return ret    
     
     @lazy_property
