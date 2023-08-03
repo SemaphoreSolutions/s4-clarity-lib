@@ -1,6 +1,8 @@
 Release History
 ===============
 1.5.0
+-
+- (#43) Added Step Setup state to Step Runner.
 - (#42) Improved Documentation, testing and function naming around container types and well ordering
 
 1.4.2
