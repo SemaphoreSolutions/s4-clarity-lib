@@ -6,6 +6,11 @@ from s4.clarity._internal.props import subnode_link, subnode_property, subnode_e
 from s4.clarity import types, lazy_property
 
 
+class InvalidWellError(Exception):
+    """ Raised when the requested well is out of range for the container """
+    pass
+
+
 class ContainerDimension(WrappedXml):
     is_alpha = subnode_property("is-alpha", types.BOOLEAN)
     offset = subnode_property("offset", types.NUMERIC)  # type: float
@@ -197,8 +202,17 @@ class Container(FieldsMixin, ClarityElement):
         :type well: str
 
         :rtype: Artifact or None
+
+        :raises s4.clarity.container.InvalidWellException: the well is not in range for this container
         """
-        try:
-            return self.placements[well]
-        except KeyError:
-            raise KeyError("Container '%s' has no artifact at '%s'." % (self.name, well))
+
+        # in principle, we calculate container_type.column_major_order_wells
+        # and clarity calculates the keys of self.placements (via xml_all_as_dict)
+        # so the two could diverge.
+        if well in self.container_type.column_major_order_wells():
+            try:
+                return self.placements[well]
+            except KeyError:
+                return None
+        else:
+            raise InvalidWellError("The well '%s' is not valid for container '%s'." % (well, self.name))
