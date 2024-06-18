@@ -274,7 +274,8 @@ class LIMS(object):
         path = urlparse.urlparse(self.root_uri).path
         current_major_version = [x for x in path.split("/") if x][-1]
         root = self.request("get", self.root_uri + "/..")
-        version = root.findall(f"version[@major='{current_major_version}']")[0]
+        xpath = "version[@major='%s']" % current_major_version
+        version = root.findall(xpath)[0]
         return version.get("minor")
 
     def raw_request(self, method, uri, **kwargs):
