@@ -534,7 +534,9 @@ class StepPlacements(ClarityElement):
         :param well_string: The location on the plate to place the artifact
         """
         placement_root = self.xml_root.find("./output-placements")
-        placement_node = ETree.SubElement(placement_root, "output-placement", {"uri": artifact.uri})
+        placement_node = self.xml_root.find(f"./output-placements/output-placement[@uri={artifact.uri}]")
+        if not placement_node:
+            placement_node = ETree.SubElement(placement_root, "output-placement", {"uri": artifact.uri})
         location_subnode = ETree.SubElement(placement_node, "location")
         ETree.SubElement(location_subnode, "container", {"uri": container.uri})
         ETree.SubElement(location_subnode, "value").text = well_string
