@@ -13,11 +13,11 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Set up Python 3.11
-        uses: actions/setup-python@v1
+      - uses: actions/checkout@v4
+      - name: Set up Python 3.12
+        uses: actions/setup-python@v5
         with:
-          python-version: 3.11
+          python-version: 3.12
       - name: Display Python version
         run: python -c "import sys; print(sys.version)"
       - name: Build s4-clarity-lib
