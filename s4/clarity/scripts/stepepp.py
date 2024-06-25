@@ -53,11 +53,24 @@ class StepEPP(GenericScript):
         Use step's logfile.
         """
         if self.options.logfile:
+
+            # Log files that are shared by Python and LLTK/LITKs on a step must
+            # use the same file name in order to prevent bugs. In Clarity 5 and
+            # earlier, the file name used by LLTK/LITKs is simply the limsid of
+            # the ResultFile. But in Clarity 6 and later it has "LogFile"
+            # appended to the name, and so we need to check the active Clarity
+            # version and adjust our behaviour accordingly.
+
+            filename = self.options.logfile
+            revision = int(self.lims.current_minor_version[1:])
+            if revision >= 31:  # Clarity 6.0 has an API minor version of 31
+                filename = "%s-LogFile" % filename
+
             if self.options.log_type == 'html':
-                filename = "%s.html" % self.options.logfile
+                filename = "%s.html" % filename
                 content_type = 'text/html'
             elif self.options.log_type == 'text':
-                filename = "%s.log" % self.options.logfile
+                filename = "%s.log" % filename
                 content_type = 'text/plain'
             else:
                 raise Exception("Unrecognized log type %s", self.options.log_type)
