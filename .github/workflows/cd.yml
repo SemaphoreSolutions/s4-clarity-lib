@@ -22,7 +22,7 @@ jobs:
         run: python -c "import sys; print(sys.version)"
       - name: Build s4-clarity-lib
         run: |
-          pip install wheel
+          pip install wheel setuptools
           python setup.py sdist bdist_wheel
       - name: Publish package distributions to PyPI
         uses: pypa/gh-action-pypi-publish@release/v1
