@@ -3,6 +3,12 @@
 import logging
 import re
 import time
+
+try:
+    import urllib.parse as urlparse  # Python 3
+except ImportError:
+    import urlparse  # Python 2
+
 from xml.etree import cElementTree as ETree
 
 import requests
@@ -246,6 +252,31 @@ class LIMS(object):
         root = self.request("get", self.root_uri + "/configuration/properties" )
         properties = root.findall("property")
         return dict( (property.get("name"), property.get("value")) for property in properties )
+
+    @lazy_property
+    def versions(self):
+        """
+        :type: list[dict]
+        """
+        root = self.request("get", self.root_uri + "/..")
+        versions = root.findall("version")
+        return list({
+            "uri": version.get("uri"),
+            "major": version.get("major"),
+            "minor": version.get("minor")
+        } for version in versions)
+
+    @lazy_property
+    def current_minor_version(self):
+        """
+        :type: str
+        """
+        path = urlparse.urlparse(self.root_uri).path
+        current_major_version = [x for x in path.split("/") if x][-1]
+        root = self.request("get", self.root_uri + "/..")
+        xpath = "version[@major='%s']" % current_major_version
+        version = root.findall(xpath)[0]
+        return version.get("minor")
 
     def raw_request(self, method, uri, **kwargs):
         """
