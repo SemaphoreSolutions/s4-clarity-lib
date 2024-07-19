@@ -340,10 +340,15 @@ class StepRunner:
         """
         For every required reagent kit in the step, the first active lot
         will be selected. If there are no active lots it will be omitted.
+
+        Archived kits will be ignored on Clarity 6.1 (api revision 32) and later.
         """
+        revision = int(self.lims.current_minor_version[1:])
         log.info("Adding default reagent lots.")
         lots = []
         for kit in self.step.configuration.required_reagent_kits:
+            if revision >= 32 and kit.archived:
+                continue
             for lot in kit.related_reagent_lots:
                 if lot.status == "ACTIVE":
                     lots.append(lot)
