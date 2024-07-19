@@ -1,5 +1,13 @@
 Release History
 ===============
+1.6.0
+-
+- (#60) Added support for Python 3.12.
+- (#55) Step placements can now be updated without having to clear existing placements first.
+- (#53) Fix an issue that prevented `StepRunner.add_default_reagents()` from working correctly on Clarity 6.1+ if the step being run contains an archived reagent kit.
+- (#51) Fix an issue that could cause log messages to become duplicated, or disappear, when `s4-clarity-lib` is being used in tandem with an LLTK/LITK on the same step in Clarity 6.0+.
+- (#51) Added `lims.versions` and `lims.current_minor_version` properties.
+
 1.5.0
 -
 - (#45) Added the `permitted_containers` property to `StepConfiguration`.
