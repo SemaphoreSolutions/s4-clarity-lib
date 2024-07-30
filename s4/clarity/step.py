@@ -453,6 +453,14 @@ class StepPools(ClarityElement):
         for sample in samples:
             ETree.SubElement(pool_node, "input", {"uri": sample.uri})
 
+    def clear_pools(self):
+        # type: () -> None
+        """
+        Removes all existing pools that were created on this step.
+        """
+        self.xml_root.remove(self.xml_root.find("./pooled-inputs"))
+        ETree.SubElement(self.xml_root, "pooled-inputs")
+
 
 class AvailableInput(WrappedXml):
     def __init__(self, lims, xml_root):
