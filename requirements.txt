@@ -1,10 +1,11 @@
 # Base requirements
-requests
+requests>=2.22.0
 argparse
 python-dateutil
 six>=1.12
 future
 typing;python_version<"3.5"
+urllib3>=1.25.2
 
 # Test requirements
 mock

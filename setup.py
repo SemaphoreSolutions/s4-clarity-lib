@@ -43,12 +43,13 @@ setup(
         'Programming Language :: Python :: Implementation :: PyPy'
     ],
     install_requires=(
-        'requests',
+        'requests>=2.22.0',
         'argparse',
         'python-dateutil',
         'six',
         'future',
-        "typing; python_version < '3.5'"
+        "typing; python_version < '3.5'",
+        'urllib3>=1.25.2'
     ),
     tests_require=(
         'mock',
