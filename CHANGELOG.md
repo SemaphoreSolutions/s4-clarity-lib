@@ -1,5 +1,9 @@
 Release History
 ===============
+1.6.1
+-
+- Explicitly declare requests >= 2.22.0 and urllib3 >= 1.25.2 as dependencies, which fixes an edge case causing the `lims.versions` and `lims.current_minor_version` properties to raise an exception on early versions of Python 3.6.
+
 1.6.0
 -
 - (#60) Added support for Python 3.12.
