@@ -3,6 +3,7 @@
 
 import logging
 
+from s4.clarity._internal.factory import MultipleMatchingElements
 from s4.clarity._internal.element import ClarityElement, WrappedXml
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
@@ -44,10 +45,16 @@ class Protocol(ClarityElement):
         """
         :rtype: StepConfiguration or None
         """
-        for step in self.steps:
-            if step.name == name:
-                return step
-        return None
+        candidate_steps = [step for step in self.steps if step.name == name]
+        if len(candidate_steps) == 1:
+            return candidate_steps[0]
+        elif len(candidate_steps) < 1:
+            return None
+        else:  # found more than 1 step with the same name
+            raise MultipleMatchingElements(
+                "Multiple steps were found with the name '%s' in the protocol "
+                "'%s'" % (name, self.name)
+            )
 
     @property
     def number_of_steps(self):
