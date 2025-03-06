@@ -384,7 +384,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "type"
 
     name = subnode_property("configuration", readonly=True)
-    instrument_used = subnode_link(Instrument, "instrument", readonly=True, attributes=('uri',))
+    instrument_used = subnode_link(Instrument, "instrument", attributes=('uri',))
 
     def __init__(self, step, *args, **kwargs):
         self.step = step

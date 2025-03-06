@@ -1,5 +1,15 @@
 Release History
 ===============
+1.7.0
+-
+- (#71) Added support for instrument types:
+   - Added a new `InstrumentType` class
+   - Modified the `Instrument` class to return `InstrumentType` objects when reading the `instrument_type` property
+   - Modified the `StepDetails` class to return `InstrumentType` objects when reading the `permitted_instrument_types` property
+   - Added a new `instrument_types` property to the `LIMS` class that can query instrument types.
+   - The `Instrument` class now correctly reports instrument limsids.
+   - The `instrument_used` property of `StepDetails` is now writable.
+
 1.6.1
 -
 - Explicitly declare requests >= 2.22.0 and urllib3 >= 1.25.2 as dependencies, which fixes an edge case causing the `lims.versions` and `lims.current_minor_version` properties to raise an exception on early versions of Python 3.6.
