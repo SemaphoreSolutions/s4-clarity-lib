@@ -5,10 +5,17 @@ import abc
 import functools
 import time
 import logging
+try:
+    from urllib.parse import urlparse, urlunparse  # Python 3
+except ImportError:
+    from urlparse import urlparse, urlunparse  # Python 2
+
+from requests import Session
 
 from s4.clarity import ETree, lazy_property
 from s4.clarity.step import Step
 from s4.clarity import ClarityException
+from s4.clarity._internal.factory import MultipleMatchingElements
 
 log = logging.getLogger(__name__)
 
@@ -44,8 +51,9 @@ class StepRunner:
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, lims, protocolname, stepconfigname, usequeuedinputs=True, numberofinputs=4):
+    def __init__(self, lims, protocolname, stepconfigname, usequeuedinputs=True, numberofinputs=4, protocolstepid=None, username=None, password=None):
         self.step = None
+        self.protocolstepid = protocolstepid
 
         self.lims = lims
         if self.lims is None:
@@ -64,6 +72,20 @@ class StepRunner:
 
         self.timeformat = "%I:%S %p"  # HH:MM am/pm
 
+        # If a username and password were supplied to the StepRunner, use them
+        # for e-signing. Otherwise use the same username and password that we
+        # are using for all other API requests. This is to handle the case
+        # where steps must be signed by a different user than the user who
+        # started the step.
+        if username:
+            self.username = username
+        else:
+            self.username = self.lims.username
+        if password:
+            self.password = password
+        else:
+            self.password = self.lims.password
+
     @lazy_property
     def step_config(self):
         """
@@ -71,7 +93,13 @@ class StepRunner:
         """
         try:
             protocol_config = self.lims.protocols.get_by_name(self.protocolname)
-            step = protocol_config.step(self.stepconfigname)
+            try:
+                step = protocol_config.step(self.stepconfigname)
+            except MultipleMatchingElements:
+                if self.protocolstepid:
+                    step = protocol_config.step_from_id(str(self.protocolstepid))
+                else:
+                    raise
         except ClarityException as ex:
             log.error("StepRunner could not load step configuration: %s" % str(ex))
             raise Exception("Configuration for step %s in protocol %s could not be located." % (self.stepconfigname, self.protocolname))
@@ -580,6 +608,55 @@ class StepRunner:
         """
         self.lims.artifacts.batch_refresh(self.step.details.inputs + self.step.details.outputs)
 
+    def sign(self):
+        """
+        Adds an eSignature to a step.
+        Step should be in Record Details phase.
+        """
+        url = urlparse(self.lims.root_uri)
+
+        # CORS headers
+        headers = {
+            'X-Requested-With': 'XMLHttpRequest',
+            'Origin': f'{url.scheme}://{url.netloc}'
+        }
+
+        session = self._get_web_authenticated_session()
+        work_num = self.step.limsid.split('-')[1]
+        res = session.post(
+            urlunparse(url._replace(path=f'/clarity/api/work/{work_num}/e-signature')),
+            data={'username': self.username, 'password': self.password},
+            headers=headers
+        )
+        if not res.ok:
+            data = res.json()
+            raise RuntimeError(
+                f"E-signing failed for step {self.step.limsid}: {data['message']}"
+            )
+
+    def _get_web_authenticated_session(self):
+        """
+        Returns a new session that has authenticated to Clarity LIMS
+        using the web GUI, rather than using the API. This is intentionally
+        kept separate from self.lims._session so that it can use different
+        credentials if required.
+        """
+        url = urlparse(self.lims.root_uri)
+        session = Session()
+
+        if self.lims._insecure:
+            session.verify = False
+
+        resp = session.post(
+            urlunparse(url._replace(path='/clarity/j_spring_security_check')),
+            data={"j_username": self.username, "j_password": self.password}
+        )
+        if not resp.ok:
+            raise RuntimeError(
+                f"Failed to authenticate to LIMS as user {self.username}"
+            )
+
+        return session
 
 class StepRunnerException(Exception):
     pass

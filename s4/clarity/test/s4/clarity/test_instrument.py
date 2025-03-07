@@ -1,12 +1,15 @@
 # Copyright 2021 Semaphore Solutions, Inc.
 # ---------------------------------------------------------------------------
 
+from datetime import date  # typing
+try:
+    from unittest.mock import patch
+except ImportError:
+    from mock import patch
+
 from s4.clarity.instrument import Instrument
 from s4.clarity.step import Step, StepDetails
-
-from s4.clarity.test.generic_testcases import LimsTestCase
-
-from datetime import date  # typing
+from s4.clarity.test.generic_testcases import FakeElement, FakeLims, LimsTestCase
 from s4.clarity.utils.date_util import str_to_date
 
 
@@ -34,19 +37,24 @@ class TestInstrument(LimsTestCase):
         Point of Interest: Instrument API endpoint only permits GET
         """
 
-        # Parse the xml into an Instrument object
-        instrument = self.element_from_xml(Instrument, INSTRUMENT_XML)  # type: Instrument
+        fake_lims = FakeLims()
+        fake_instrument_type = FakeElement()
 
-        self.assertEqual(instrument.name, "instrument_2")
-        self.assertEqual(instrument.limsid, "4")
-        self.assertEqual(instrument.instrument_type, "Instrument ABC")
-        self.assertEqual(instrument.serial_number, "2222")
-        self.assertEqual(instrument.archived, False)
+        with patch.object(self, "get_fake_lims", return_value=fake_lims):
+            with patch.object(fake_lims.instrument_types, "get_by_name", return_value=fake_instrument_type):
+                # Parse the xml into an Instrument object
+                instrument = self.element_from_xml(Instrument, INSTRUMENT_XML)  # type: Instrument
 
-        clarity_date_time_str = "2021-12-06"
-        expected_date = str_to_date(clarity_date_time_str)  # type: date
+                self.assertEqual(instrument.name, "instrument_2")
+                self.assertEqual(instrument.limsid, "55-4")
+                self.assertEqual(instrument.instrument_type, fake_instrument_type)
+                self.assertEqual(instrument.serial_number, "2222")
+                self.assertEqual(instrument.archived, False)
 
-        self.assertEqual(instrument.expiry_date, expected_date)
+                clarity_date_time_str = "2021-12-06"
+                expected_date = str_to_date(clarity_date_time_str)  # type: date
+
+                self.assertEqual(instrument.expiry_date, expected_date)
 
 
 STEP_XML = \

@@ -6,30 +6,12 @@ from unittest import TestCase
 from s4.clarity import ETree
 
 
-class LimsTestCase(TestCase):
-
-    @staticmethod
-    def element_from_xml(element_class, xml, **extra_kwargs):
-        try:
-            return element_class(
-                lims=FakeLims(),
-                xml_root=ETree.fromstring(xml),
-                **extra_kwargs
-            )
-        except TypeError as e:
-            str(e)
-            if "__init__() takes at least" in str(e):
-                raise TypeError("Unable to instantiate %s, provide extra args in extra_kwargs. %s"
-                                % (element_class.__name__, e))
-            else:
-                raise e
-
-
 class FakeLims:
     def __init__(self):
         self.artifacts = FakeFactory()
         self.samples = FakeFactory()
         self.steps = FakeFactory()
+        self.instrument_types = FakeFactory()
 
     def factory_for(self, element_type):
         return self.artifacts
@@ -39,8 +21,11 @@ class FakeFactory:
     def __init__(self):
         self.instances = {}
 
-    def from_link_node(self, linknode):
+    def get_by_name(self, name):
+        o = FakeElement()
+        return o
 
+    def from_link_node(self, linknode):
         if linknode is None:
             return None
 
@@ -74,3 +59,25 @@ class FakeFactory:
 class FakeElement:
     def __str__(self):
         return str(self.__dict__)
+
+
+class LimsTestCase(TestCase):
+
+    @staticmethod
+    def get_fake_lims():
+        return FakeLims()
+
+    def element_from_xml(self, element_class, xml, **extra_kwargs):
+        try:
+            return element_class(
+                lims=self.get_fake_lims(),
+                xml_root=ETree.fromstring(xml),
+                **extra_kwargs
+            )
+        except TypeError as e:
+            str(e)
+            if "__init__() takes at least" in str(e):
+                raise TypeError("Unable to instantiate %s, provide extra args in extra_kwargs. %s"
+                                % (element_class.__name__, e))
+            else:
+                raise e
