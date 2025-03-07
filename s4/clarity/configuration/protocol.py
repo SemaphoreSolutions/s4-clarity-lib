@@ -7,7 +7,13 @@ from s4.clarity._internal.factory import MultipleMatchingElements
 from s4.clarity._internal.element import ClarityElement, WrappedXml
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
-from s4.clarity._internal.props import subnode_property_list_of_dicts, subnode_property, subnode_property_literal_dict, attribute_property, subnode_element_list
+from s4.clarity._internal.props import (
+    subnode_property_list_of_dicts,
+    subnode_property,
+    subnode_property_literal_dict,
+    attribute_property,
+    subnode_element_list,
+)
 from s4.clarity import types, lazy_property
 
 log = logging.getLogger(__name__)
@@ -16,7 +22,7 @@ log = logging.getLogger(__name__)
 class Protocol(ClarityElement):
     UNIVERSAL_TAG = "{http://genologics.com/ri/protocolconfiguration}protocol"
 
-    properties = subnode_property_literal_dict('protocol-properties', 'protocol-property')
+    properties = subnode_property_literal_dict("protocol-properties", "protocol-property")
     index = attribute_property("index", typename=types.NUMERIC)
 
     @lazy_property
@@ -24,11 +30,11 @@ class Protocol(ClarityElement):
         """
         :type: list[StepConfiguration]
         """
-        return [StepConfiguration(self, n) for n in self.xml_findall('./steps/step')]
+        return [StepConfiguration(self, n) for n in self.xml_findall("./steps/step")]
 
     def _step_node(self, name):
-        for n in self.xml_findall('./steps/step'):
-            if n.get('name') == name:
+        for n in self.xml_findall("./steps/step"):
+            if n.get("name") == name:
                 return n
         return None
 
@@ -37,7 +43,7 @@ class Protocol(ClarityElement):
         :rtype: StepConfiguration or None
         """
         for step in self.steps:
-            if step.uri.split('/')[-1] == stepid:
+            if step.uri.split("/")[-1] == stepid:
                 return step
         return None
 
@@ -80,18 +86,20 @@ class StepConfiguration(ClarityElement):
         super(StepConfiguration, self).__init__(protocol.lims, uri=None, xml_root=node)
         self.protocol = protocol
 
-    properties = subnode_property_literal_dict('step-properties', 'step-property')
+    properties = subnode_property_literal_dict("step-properties", "step-property")
     protocol_step_index = subnode_property("protocol-step-index", types.NUMERIC)
     queue_fields = subnode_element_list(ProtocolStepField, "queue-fields", "queue-field")
     step_fields = subnode_element_list(ProtocolStepField, "step-fields", "step-field")
     sample_fields = subnode_element_list(ProtocolStepField, "sample-fields", "sample-field")
-    triggers = subnode_property_list_of_dicts('epp-triggers/epp-trigger', as_attributes=[
-        'status', 'point', 'type', 'name'
-    ])
-    transitions = subnode_property_list_of_dicts('transitions/transition', as_attributes=[
-        'name', 'sequence', 'next-step-uri'
-    ], order_by=lambda x: int(x.get('sequence')))
-    
+    triggers = subnode_property_list_of_dicts(
+        "epp-triggers/epp-trigger", as_attributes=["status", "point", "type", "name"]
+    )
+    transitions = subnode_property_list_of_dicts(
+        "transitions/transition",
+        as_attributes=["name", "sequence", "next-step-uri"],
+        order_by=lambda x: int(x.get("sequence")),
+    )
+
     def refresh(self):
         """
         :raise Exception: Unable to refresh step directly, use protocol
@@ -110,7 +118,7 @@ class StepConfiguration(ClarityElement):
         """
         :type: ProcessType
         """
-        pt_display_name = self.get_node_text('process-type')
+        pt_display_name = self.get_node_text("process-type")
 
         results = self.lims.process_types.query(displayname=pt_display_name)
         if results:
@@ -140,6 +148,15 @@ class StepConfiguration(ClarityElement):
         :type: ContainerType
         """
         container_types = self.xml_findall("./permitted-containers/container-type")
+
+        # a No Outputs step has no permitted containers
+        # but searching for a blank name returns all container types
+        # so we need to check if there are any containers at all
+        # if not, we return an empty list rather than everything
+
+        if len(list(container_types)) == 0:
+            log.warning("No containers found for the step")
+            return []
 
         # container-type (type generic-type-link) has no uri attribute. find the container by name
         # beware if your lims has multiple containers with the same name
