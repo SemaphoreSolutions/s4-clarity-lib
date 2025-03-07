@@ -1,5 +1,22 @@
 Release History
 ===============
+1.7.0
+-
+- (#71) Added support for instrument types:
+   - Added a new `InstrumentType` class
+   - Modified the `Instrument` class to return `InstrumentType` objects when reading the `instrument_type` property
+   - Modified the `StepDetails` class to return `InstrumentType` objects when reading the `permitted_instrument_types` property
+   - Added a new `instrument_types` property to the `LIMS` class that can query instrument types.
+   - The `Instrument` class now correctly reports instrument limsids.
+   - The `instrument_used` property of `StepDetails` is now writable.
+- Several updates to `StepRunner`:
+   - (#69) Step runners now support running the same step multiple times within a protocol.
+   - (#76) Step runners can now sign steps that require an eSignature, by calling `self.sign()` from the `record_details()` method.
+- (#68) The "Leave in QC Protocol" artifact action can now be selected at the Next Steps screen by using `step.actions.artifact_actions[artifact].leave_in_qc_protocol()`
+- (#67) The `replace_and_commit_from_local` method of the `File` class now supports an optional `name` parameter, allowing you to upload a file to Clarity using a different name from the on-disk filename.
+- (#65) Fixes a bug in `StepConfiguration.permitted_containers()` that caused steps with no permitted containers (i.e. no-output steps) to return all container types instead of none. 
+- (#63) Added the `Step.clear_pools()` method which can be used to remove any existing pools that were created on a step.
+
 1.6.1
 -
 - Explicitly declare requests >= 2.22.0 and urllib3 >= 1.25.2 as dependencies, which fixes an edge case causing the `lims.versions` and `lims.current_minor_version` properties to raise an exception on early versions of Python 3.6.
