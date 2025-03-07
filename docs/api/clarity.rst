@@ -112,7 +112,7 @@ File
     :show-inheritance:
 
 Instrument
---------
+----------
 
 .. autoclass:: s4.clarity.instrument.Instrument
     :members:
