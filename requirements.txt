@@ -8,7 +8,7 @@ typing;python_version<"3.5"
 urllib3>=1.25.2
 
 # Test requirements
-mock
+mock==1.0.1
 pytest
 
 # Coverage
@@ -17,7 +17,6 @@ coveralls
 
 # Documentation requirements
 pillow
-mock==1.0.1
 alabaster>=0.7,<0.8,!=0.7.5
 commonmark==0.9.1
 recommonmark==0.5.0
