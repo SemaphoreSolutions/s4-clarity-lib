@@ -143,7 +143,7 @@ class LIMS(object):
         self.permissions = ElementFactory(self, Permission, batch_flags=BatchFlags.QUERY)
 
         # configuration
-        from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation
+        from .configuration import Workflow, Protocol, ProcessType, Udf, ProcessTemplate, Automation, InstrumentType
 
         self.workflows = ElementFactory(self, Workflow, batch_flags=BatchFlags.QUERY,
                                         request_path='/configuration/workflows')
@@ -157,6 +157,9 @@ class LIMS(object):
                                                 name_attribute="name")
         self.automations = ElementFactory(self, Automation, batch_flags=BatchFlags.QUERY,
                                           name_attribute="name", request_path="/configuration/automations")
+
+        self.instrument_types = ElementFactory(self, InstrumentType, batch_flags=BatchFlags.QUERY,
+                                          name_attribute="name", request_path="/configuration/instrumenttypes")
 
         self.stages = ElementFactory(self, Stage)
 

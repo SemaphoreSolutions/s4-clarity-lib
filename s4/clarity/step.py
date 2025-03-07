@@ -29,6 +29,7 @@ REWORK_ACTION = "rework"
 REVIEW_ACTION = "review"
 STORE_ACTION = "store"
 NEXT_STEP_ACTION = "nextstep"
+LEAVE_IN_QC_PROTOCOL_ACTION = "leave"
 
 PROGRAM_STATUS_ERROR = "ERROR"
 PROGRAM_STATUS_RUNNING = "RUNNING"
@@ -252,6 +253,12 @@ class ArtifactAction(WrappedXml):
         super(ArtifactAction, self).__init__(lims, xml_root)
         self.step = step
 
+    def leave_in_qc_protocol(self):
+        """
+        Sets the Next Step property for the artifact specified by artifact_uri to 'Leave in QC Protocol'
+        """
+        self._set_artifact_next_action(LEAVE_IN_QC_PROTOCOL_ACTION)
+
     def remove_from_workflow(self):
         """
         Sets the Next Step property for the artifact specified by artifact_uri to 'Remove From Workflow'
@@ -384,7 +391,7 @@ class StepDetails(IOMapsMixin, FieldsMixin, ClarityElement):
     IOMAPS_OUTPUT_TYPE_ATTRIBUTE = "type"
 
     name = subnode_property("configuration", readonly=True)
-    instrument_used = subnode_link(Instrument, "instrument", readonly=True, attributes=('uri',))
+    instrument_used = subnode_link(Instrument, "instrument", attributes=('uri',))
 
     def __init__(self, step, *args, **kwargs):
         self.step = step

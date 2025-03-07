@@ -3,6 +3,7 @@
 
 import logging
 
+from s4.clarity._internal.factory import MultipleMatchingElements
 from s4.clarity._internal.element import ClarityElement, WrappedXml
 from s4.clarity.reagent_kit import ReagentKit
 from s4.clarity.control_type import ControlType
@@ -44,10 +45,16 @@ class Protocol(ClarityElement):
         """
         :rtype: StepConfiguration or None
         """
-        for step in self.steps:
-            if step.name == name:
-                return step
-        return None
+        candidate_steps = [step for step in self.steps if step.name == name]
+        if len(candidate_steps) == 1:
+            return candidate_steps[0]
+        elif len(candidate_steps) < 1:
+            return None
+        else:  # found more than 1 step with the same name
+            raise MultipleMatchingElements(
+                "Multiple steps were found with the name '%s' in the protocol "
+                "'%s'" % (name, self.name)
+            )
 
     @property
     def number_of_steps(self):
@@ -146,15 +153,28 @@ class StepConfiguration(ClarityElement):
                 "share the same name?"
             )
 
-        return ret    
-    
+        return ret
+
     @lazy_property
     def permitted_instrument_types(self):
         """
-        :type: List[str]
+        :type: InstrumentType
         """
-        instrument_type_nodes = self.xml_findall("./permitted-instrument-types/instrument-type")
-        return [node.text for node in instrument_type_nodes]
+        instrument_types = self.xml_findall("./permitted-instrument-types/instrument-type")
+
+        # instrument-type (type generic-type-link) has no uri attribute. find the instrument by name
+        # beware if your lims has multiple instruments with the same name
+
+        ret = self.lims.instrument_types.query(name=[i.text for i in instrument_types])
+
+        if len(instrument_types) != len(ret):  # can len(types) > len(ret)?
+            log.warning(
+                "The number of instrument types found differs from the number "
+                "specified in the step config. Do multiple instrument types "
+                "share the same name?"
+            )
+
+        return ret
 
     @lazy_property
     def queue(self):

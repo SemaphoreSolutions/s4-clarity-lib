@@ -103,10 +103,12 @@ class File(ClarityElement):
 
         target_file_object.write(file_contents)
 
-    def replace_and_commit_from_local(self, local_file_path, content_type='text/plain', mode="r+b"):
+    def replace_and_commit_from_local(self, local_file_path, content_type='text/plain', mode="r+b", name=None):
+        if not name:
+            name = local_file_path
         self.mode = mode
         other_file = open(local_file_path, self.mode)
-        self.replace_and_commit(other_file, local_file_path, content_type)
+        self.replace_and_commit(other_file, name, content_type)
         other_file.close()
 
     def replace_and_commit(self, stream, name, content_type='text/plain'):

@@ -118,6 +118,13 @@ Instrument
     :members:
     :show-inheritance:
 
+Instrument Type
+---------------
+
+.. autoclass:: s4.clarity.configuration.InstrumentType
+    :members:
+    :show-inheritance:
+
 IO Map
 ------
 

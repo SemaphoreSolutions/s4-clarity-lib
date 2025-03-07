@@ -15,6 +15,7 @@ from requests import Session
 from s4.clarity import ETree, lazy_property
 from s4.clarity.step import Step
 from s4.clarity import ClarityException
+from s4.clarity._internal.factory import MultipleMatchingElements
 
 log = logging.getLogger(__name__)
 
@@ -50,8 +51,9 @@ class StepRunner:
 
     __metaclass__ = abc.ABCMeta
 
-    def __init__(self, lims, protocolname, stepconfigname, usequeuedinputs=True, numberofinputs=4, username=None, password=None):
+    def __init__(self, lims, protocolname, stepconfigname, usequeuedinputs=True, numberofinputs=4, protocolstepid=None, username=None, password=None):
         self.step = None
+        self.protocolstepid = protocolstepid
 
         self.lims = lims
         if self.lims is None:
@@ -91,7 +93,13 @@ class StepRunner:
         """
         try:
             protocol_config = self.lims.protocols.get_by_name(self.protocolname)
-            step = protocol_config.step(self.stepconfigname)
+            try:
+                step = protocol_config.step(self.stepconfigname)
+            except MultipleMatchingElements:
+                if self.protocolstepid:
+                    step = protocol_config.step_from_id(str(self.protocolstepid))
+                else:
+                    raise
         except ClarityException as ex:
             log.error("StepRunner could not load step configuration: %s" % str(ex))
             raise Exception("Configuration for step %s in protocol %s could not be located." % (self.stepconfigname, self.protocolname))
