@@ -6,9 +6,11 @@ from .workflow import Workflow
 from .process_type import ProcessType, ProcessTemplate, Automation
 from .udf import Udf
 from .stage import Stage
+from .instrument_type import InstrumentType
 
 module_members = [
     Automation,
+    InstrumentType,
     ProcessTemplate,
     ProcessType,
     Protocol,

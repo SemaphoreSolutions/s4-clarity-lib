@@ -146,15 +146,28 @@ class StepConfiguration(ClarityElement):
                 "share the same name?"
             )
 
-        return ret    
-    
+        return ret
+
     @lazy_property
     def permitted_instrument_types(self):
         """
-        :type: List[str]
+        :type: InstrumentType
         """
-        instrument_type_nodes = self.xml_findall("./permitted-instrument-types/instrument-type")
-        return [node.text for node in instrument_type_nodes]
+        instrument_types = self.xml_findall("./permitted-instrument-types/instrument-type")
+
+        # instrument-type (type generic-type-link) has no uri attribute. find the instrument by name
+        # beware if your lims has multiple instruments with the same name
+
+        ret = self.lims.instrument_types.query(name=[i.text for i in instrument_types])
+
+        if len(instrument_types) != len(ret):  # can len(types) > len(ret)?
+            log.warning(
+                "The number of instrument types found differs from the number "
+                "specified in the step config. Do multiple instrument types "
+                "share the same name?"
+            )
+
+        return ret
 
     @lazy_property
     def queue(self):
