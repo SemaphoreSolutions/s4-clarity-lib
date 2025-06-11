@@ -624,6 +624,27 @@ class StepReagentLots(ClarityElement):
         for element in elements:
             if element.uri not in current_lots:
                 ETree.SubElement(reagent_lots, "reagent-lot", {"uri": element.uri})
+    
+    def remove_reagent_lots(self, elements):
+        # type: (List[ReagentLot]) -> None
+        """
+        :param elements: Remove reagent lots from the step
+        :type elements: list[ReagentLot]
+        """
+
+        reagent_lots = self.xml_find("./reagent-lots")
+        for element in elements:
+            for lot_node in reagent_lots.findall("reagent-lot"):
+                if lot_node.get("uri") == element.uri:
+                    reagent_lots.remove(lot_node)
+
+    def clear_reagent_lots(self):
+        # type: () -> None
+        """
+        Clear all reagent lots from the step
+        """
+        self.xml_root.remove(self.xml_root.find("./reagent-lots"))
+        ETree.SubElement(self.xml_root, "reagent-lots")
 
     @property
     def reagent_lots(self):
