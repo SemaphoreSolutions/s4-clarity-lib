@@ -1,5 +1,9 @@
 Release History
 ===============
+1.7.1
+-
+- (#78) Added functionality to remove individual reagent lots (`StepReagentLots.remove_reagent_lots()`), and clear all reagent lots (`StepReagentLots.clear_reagent_lots()`) from a step.
+
 1.7.0
 -
 - (#71) Added support for instrument types:
