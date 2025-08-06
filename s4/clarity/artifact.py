@@ -54,7 +54,7 @@ class Artifact(FieldsMixin, ClarityElement):
     @lazy_property
     def parents(self):
         """:type: list[Artifact]"""
-        if len(self.parent_process.outputs) == 0:  # a no-output step
+        if not self.parent_process or len(self.parent_process.outputs) == 0:  # no parent or no-output step
             return []
         iomap = self.parent_process.iomaps_output_keyed()
         return iomap[self]
