@@ -184,20 +184,22 @@ class ElementFactory(object):
         uri = self.uri + "/" + limsid
         return self.get(uri, limsid=limsid, force_full_get=force_full_get)
 
-    def get_by_name(self, name):
+    def get_by_name(self, name, allow_multiple=False):
         # type: (str) -> ClarityElement
         """
         Queries for a ClarityElement that is described by the unique name.
         An exception is raised if there is no match or more than one match.
 
         :raises NoMatchingElement: if no match
-        :raises MultipleMatchingElements: if multiple matches
+        :raises MultipleMatchingElements: if multiple matches and multiple not allowed
         """
         matches = self.query(**{self.name_attribute: name})
         if len(matches) == 0:
             raise NoMatchingElement("No %s found with name '%s'" % (self.element_class.__name__, name))
-        elif len(matches) > 1:
+        elif len(matches) > 1 and not allow_multiple:
             raise MultipleMatchingElements("More than one %s found with name '%s'" % (self.element_class.__name__, name))
+        elif len(matches) > 1 and allow_multiple:
+            return matches
 
         return matches[0]
 
