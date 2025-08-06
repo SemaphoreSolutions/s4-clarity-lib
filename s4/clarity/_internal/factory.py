@@ -188,7 +188,7 @@ class ElementFactory(object):
         # type: (str) -> ClarityElement
         """
         Queries for a ClarityElement that is described by the unique name.
-        An exception is raised if there is no match or more than one match.
+        An exception is raised if there is no match or more than one match unless allow_multiple is True.
 
         :raises NoMatchingElement: if no match
         :raises MultipleMatchingElements: if multiple matches and multiple not allowed
