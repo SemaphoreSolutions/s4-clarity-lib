@@ -51,6 +51,14 @@ class Artifact(FieldsMixin, ClarityElement):
         """:type: Step"""
         return self.lims.steps.from_link_node(self.xml_find("./parent-process"))
 
+    @lazy_property
+    def parents(self):
+        """:type: list[Artifact]"""
+        if not self.parent_process or len(self.parent_process.outputs) == 0:  # no parent or no-output step
+            return []
+        iomap = self.parent_process.iomaps_output_keyed()
+        return iomap[self]
+
     @property
     def sample(self):
         """:type: Sample"""
