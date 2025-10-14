@@ -4,6 +4,7 @@
 from s4.clarity._internal import ClarityElement
 from s4.clarity._internal.props import subnode_links, subnode_property
 from .process_type import ProcessType
+from typing import Union
 
 
 class InstrumentType(ClarityElement):
@@ -17,14 +18,14 @@ class InstrumentType(ClarityElement):
     vendor = subnode_property("vendor")
     process_types = subnode_links(ProcessType, "process-type", "process-types")
 
-    def __eq__(self, other: str | ClarityElement | object) -> bool:
+    def __eq__(self, other: Union[str, ClarityElement, object]) -> bool:
         if isinstance(other, str):
             return self.name == other
         elif isinstance(other, ClarityElement):
             return self.uri == other.uri
         return False
 
-    def __ne__(self, other: str | ClarityElement | object) -> bool:
+    def __ne__(self, other: Union[str, ClarityElement, object]) -> bool:
         if isinstance(other, str):
             return self.name != other
         elif isinstance(other, ClarityElement):
