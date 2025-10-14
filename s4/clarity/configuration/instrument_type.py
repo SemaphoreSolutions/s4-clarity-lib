@@ -16,3 +16,17 @@ class InstrumentType(ClarityElement):
     name = subnode_property("name")
     vendor = subnode_property("vendor")
     process_types = subnode_links(ProcessType, "process-type", "process-types")
+
+    def __eq__(self, other: str | ClarityElement | object) -> bool:
+        if isinstance(other, str):
+            return self.name == other
+        elif isinstance(other, ClarityElement):
+            return self.uri == other.uri
+        return False
+
+    def __ne__(self, other: str | ClarityElement | object) -> bool:
+        if isinstance(other, str):
+            return self.name != other
+        elif isinstance(other, ClarityElement):
+            return self.uri != other.uri
+        return True
