@@ -1,5 +1,11 @@
 Release History
 ===============
+1.8.0
+-
+- (#85) Restored backwards compatibility for comparing `InstrumentType` objects to plain strings.
+- (#86) Added `locked` property (and an `archived` alias for it) to the `Researcher` element, including getter and setter methods.
+- Added support for Python 3.13 and Python 3.14.
+
 1.7.2
 -
 - (#80) Added a convenience property for accessing the parents of an artifact (`Artifact.parents`).

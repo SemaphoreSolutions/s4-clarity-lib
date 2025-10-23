@@ -16,24 +16,43 @@ class Researcher(FieldsMixin, ClarityElement):
     last_name = subnode_property("last-name")
     email = subnode_property("email")
     initials = subnode_property("initials")
+    _locked = subnode_property("credentials/account-locked")
 
-    lab = subnode_link(Lab, "lab", attributes=('uri',))
+    @property
+    def locked(self):
+        val = self._locked
+        return str(val).lower() == "true" if val is not None else False
+
+    @locked.setter
+    def locked(self, value):
+        self._locked = "true" if value else "false"
+
+    # Alias for locked property (UI terminology)
+    @property
+    def archived(self):
+        return self.locked
+
+    @archived.setter
+    def archived(self, value):
+        self.locked = value
+
+    lab = subnode_link(Lab, "lab", attributes=("uri",))
 
     username = subnode_property("credentials/username")
     password = subnode_property("credentials/password")
     roles = subnode_links(Role, "credentials/role")
 
     def add_role(self, new_role):
-        credentials_node = self.xml_find('credentials')
+        credentials_node = self.xml_find("credentials")
 
         for child in credentials_node:
             if child.tag == "role" and child.get("name") == new_role.name:
                 return
 
-        ETree.SubElement(credentials_node, 'role', {"uri": new_role.uri})
+        ETree.SubElement(credentials_node, "role", {"uri": new_role.uri})
 
     def remove_role(self, role):
-        credentials_node = self.xml_find('credentials')
+        credentials_node = self.xml_find("credentials")
 
         nodes_to_remove = []
 
