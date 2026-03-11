@@ -657,6 +657,10 @@ class StepRunner:
             )
 
         return session
+        
+    def abort_step(self):
+        """Aborts the current step"""
+        self.lims.steps.delete(self.step)
 
 class StepRunnerException(Exception):
     pass
