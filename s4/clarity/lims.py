@@ -122,7 +122,7 @@ class LIMS(object):
 
         self.projects = ElementFactory(self, Project, batch_flags=BatchFlags.QUERY)
 
-        self.control_types = ElementFactory(self, ControlType)
+        self.control_types = ElementFactory(self, ControlType, batch_flags=BatchFlags.QUERY)
 
         self.queues = ElementFactory(self, Queue)
 
